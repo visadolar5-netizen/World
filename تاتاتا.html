@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>🚀 AI Auto-Business Generator</title>
+<style>
+body { font-family: Arial; background:#f7f7f7; margin:0; padding:0; }
+.container { max-width:900px; margin:30px auto; background:white; padding:30px; border-radius:15px; box-shadow:0 0 25px #0002; }
+h1 { text-align:center; font-size:34px; margin-bottom:10px; }
+.desc { text-align:center; font-size:18px; margin-bottom:20px; color:#555; }
+textarea { width:100%; height:120px; padding:15px; border-radius:10px; font-size:16px; border:1px solid #ccc; margin-bottom:15px; }
+button { width:100%; padding:15px; background:#0a84ff; color:white; border:none; margin-top:10px; border-radius:12px; font-size:18px; cursor:pointer; }
+button:hover { background:#006ad7; }
+.output { margin-top:20px; padding:20px; background:#f0f8ff; min-height:150px; border-radius:12px; font-size:16px; }
+.features { display:flex; flex-wrap:wrap; justify-content:space-between; margin-bottom:15px; }
+.feature-btn { flex:0 0 48%; padding:12px; margin-bottom:10px; background:#00c851; color:white; border:none; border-radius:10px; cursor:pointer; }
+.feature-btn:hover { background:#007e33; }
+a { color:#0a84ff; text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🚀 AI Auto-Business Generator</h1>
+  <div class="desc">اكتب فكرتك أو كلمة وسيتم توليد مشروع كامل + أدوات + خطة تسويق فورًا!</div>
+  <textarea id="input" placeholder="اكتب فكرة مشروعك أو أي كلمة…"></textarea>
+  <div class="features">
+    <button class="feature-btn" onclick="generate('project')">💡 مشروع جاهز + خطة عمل</button>
+    <button class="feature-btn" onclick="generate('content')">📝 محتوى جاهز للنشر</button>
+    <button class="feature-btn" onclick="generate('marketing')">📈 خطة تسويق كاملة</button>
+    <button class="feature-btn" onclick="generate('website')">🌐 صفحة ويب + هوية المشروع</button>
+  </div>
+  <div class="output" id="result">ستظهر هنا النتائج فورًا…</div>
+  <button onclick="subscribe()">💎 اشترك للوصول لكل الأدوات</button>
+</div>
+
+<script>
+function generate(type){
+  const text = document.getElementById("input").value.trim();
+  if(!text) return alert("اكتب شيئًا أولًا!");
+  const resultBox = document.getElementById("result");
+  resultBox.innerHTML = "⏳ جارٍ توليد المشروع…";
+
+  let content = "";
+  switch(type){
+    case 'project':
+      content = `💡 مشروع كامل جاهز لفكرتك "${text}"\n\n- اسم المشروع: "${text} Hub"\n- فكرة المنتج: "${text} Solution"\n- خطوات التشغيل: إنشاء متجر، نشر محتوى، جذب العملاء\n- أدوات مقترحة:\n  • <a href="[Shopify Affiliate Link]" target="_blank">Shopify</a>\n  • <a href="[Notion Template]" target="_blank">Notion Template</a>\n  • <a href="[Canva Design]" target="_blank">Canva Design</a>`;
+      break;
+    case 'content':
+      content = `📝 محتوى جاهز لنشر مشروع "${text}"\n\n- مقالات، منشورات سوشيال، نصوص إعلانات\n- أدوات مقترحة:\n  • <a href="[Writesonic Affiliate Link]" target="_blank">Writesonic</a>\n  • <a href="[Jasper AI Link]" target="_blank">Jasper AI</a>`;
+      break;
+    case 'marketing':
+      content = `📈 خطة تسويق لمشروع "${text}"\n\n- حملات إعلانية، صفحات هبوط، SEO، Email Marketing\n- أدوات مقترحة:\n  • <a href="[Mailchimp Affiliate Link]" target="_blank">Mailchimp</a>\n  • <a href="[Canva Link]" target="_blank">Canva</a>\n  • <a href="[Google Ads Affiliate Link]" target="_blank">Google Ads</a>`;
+      break;
+    case 'website':
+      content = `🌐 صفحة ويب + هوية المشروع "${text}"\n\n- تصميم شعار، صفحة هبوط، رابط سريع للعملاء\n- أدوات مقترحة:\n  • <a href="[Hostinger Affiliate Link]" target="_blank">Hostinger</a>\n  • <a href="[Wix Affiliate Link]" target="_blank">Wix</a>\n  • <a href="[Canva Logo Link]" target="_blank">Canva Logo</a>`;
+      break;
+  }
+  resultBox.innerHTML = content;
+}
+
+function subscribe(){
+  alert("🎯 للاشتراك الكامل والوصول لكل الأدوات، سيتم توجيهك لبوابة الدفع أو رابط أفلييت لاحقًا.");
+}
+</script>
+</body>
+</html>
