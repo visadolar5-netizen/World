@@ -2,131 +2,138 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>🚀 AI Auto-Business Generator – اربح من الذكاء الاصطناعي</title>
+<title>بوابة الدفع بالباركود</title>
 <style>
-body { font-family: Arial; background:#f2f2f2; margin:0; padding:0; }
-.container { max-width:900px; margin:30px auto; background:white; padding:30px; border-radius:15px; box-shadow:0 0 25px #0002; }
-h1 { text-align:center; font-size:34px; margin-bottom:10px; }
-.desc { text-align:center; font-size:18px; margin-bottom:20px; color:#555; }
-textarea { width:100%; height:120px; padding:15px; border-radius:10px; font-size:16px; border:1px solid #ccc; margin-bottom:15px; }
-button { width:100%; padding:15px; background:#0a84ff; color:white; border:none; margin-top:10px; border-radius:12px; font-size:18px; cursor:pointer; }
-button:hover { background:#006ad7; }
-.output { margin-top:20px; padding:20px; background:#f0f8ff; min-height:150px; border-radius:12px; font-size:16px; }
-.features { display:flex; flex-wrap:wrap; justify-content:space-between; margin-bottom:15px; }
-.feature-btn { flex:0 0 48%; padding:12px; margin-bottom:10px; background:#00c851; color:white; border:none; border-radius:10px; cursor:pointer; }
-.feature-btn:hover { background:#007e33; }
-a { color:#0a84ff; font-weight:bold; }
-.service-box { background:#fff4d1; padding:15px; border-radius:10px; margin-top:20px; font-size:17px; }
-.service-box h3 { margin:0 0 10px 0; }
+body { font-family: Arial; background:#fafafa; margin:0; padding:0; }
+.container { max-width:400px; margin:40px auto; background:white; padding:20px; border-radius:15px; text-align:center; box-shadow:0 0 15px rgba(0,0,0,0.1); }
+
+.qr-box img { width:250px; }
+
+.admin-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background:#333;
+    color:white;
+    padding:12px 15px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:20px;
+}
+
+.modal {
+    display:none;
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.5);
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-content {
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    width:300px;
+    text-align:center;
+}
+input[type=file], input[type=password] {
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+}
+button { padding:10px 15px; margin-top:10px; }
 </style>
 </head>
 <body>
+
 <div class="container">
-  <h1>🚀 AI Auto-Business Generator</h1>
-  <div class="desc">اكتب فكرتك وسيتم توليد مشروع كامل + محتوى + خطة تسويق + روابط أدوات ربح!</div>
+    <h2>🔵 بوابة الدفع عبر الباركود</h2>
+    <p>امسح الباركود لإتمام عملية الدفع</p>
 
-  <textarea id="input" placeholder="اكتب فكرة مشروعك… مثال: متجر إلكتروني، ملابس، ذكاء اصطناعي…"></textarea>
+    <div class="qr-box">
+        <img id="barcodeImage" src="" alt="Barcode">
+    </div>
+</div>
 
-  <div class="features">
-    <button class="feature-btn" onclick="generate('project')">💡 مشروع + خطة عمل</button>
-    <button class="feature-btn" onclick="generate('content')">📝 محتوى جاهز</button>
-    <button class="feature-btn" onclick="generate('marketing')">📈 خطة تسويق</button>
-    <button class="feature-btn" onclick="generate('website')">🌐 صفحة ويب جاهزة</button>
-  </div>
+<!-- زر الأدمن -->
+<div class="admin-btn" onclick="openAdmin()">⚙️</div>
 
-  <div class="output" id="result">⚡ النتائج ستظهر هنا فورًا…</div>
+<!-- نافذة لوحة التحكم -->
+<div id="adminModal" class="modal">
+    <div class="modal-content">
 
-  <div class="service-box">
-    <h3>🔥 خدمة جاهزة للبيع:</h3>
-    - تصميم موقع + صفحة هبوط + خطة تسويق احترافية  
-    - السعر: **20 دينار فقط**  
-    <br><br>
-    <button style="background:#ff8800" onclick="contact()">💬 تواصل عبر واتساب لشراء الخدمة</button>
-  </div>
+        <div id="stepPassword">
+            <h3>دخول الأدمن</h3>
+            <input type="password" id="adminPass" placeholder="أدخل كلمة السر">
+            <button onclick="checkPassword()">دخول</button>
+        </div>
+
+        <div id="stepUpload" style="display:none;">
+            <h3>تغيير صورة الباركود</h3>
+            <input type="file" id="barcodeFile" accept="image/*">
+            <button onclick="uploadBarcode()">حفظ</button>
+        </div>
+
+        <button onclick="closeAdmin()">إغلاق</button>
+    </div>
 </div>
 
 <script>
-function generate(type){
-  const text = document.getElementById("input").value.trim();
-  if(!text) return alert("⚠️ اكتب فكرة أولاً!");
-  const r = document.getElementById("result");
+// كلمة السر السرّية (يمكنك تغييرها)
+const ADMIN_PASSWORD = "1234";
 
-  r.innerHTML = "⏳ جاري التوليد…";
+// تحميل الباركود من التخزين إن وجد
+window.onload = function() {
+    const savedBarcode = localStorage.getItem("barcodeImage");
+    if (savedBarcode) {
+        document.getElementById("barcodeImage").src = savedBarcode;
+    } else {
+        // صورة افتراضية
+        document.getElementById("barcodeImage").src = "https://via.placeholder.com/250x250?text=Barcode";
+    }
+};
 
-  // روابط أفلييت جاهزة (لا تحتاج تسجيل)
-  const tools = {
-    shopify: "https://go.shopify.com/",
-    hostinger: "https://hostinger.com/",
-    canva: "https://www.canva.com/",
-    mailchimp: "https://mailchimp.com/",
-    wix: "https://wix.com/"
-  };
-
-  let out = "";
-
-  switch(type){
-    case 'project':
-      out = `
-      <b>💡 مشروع جاهز لفكرتك: ${text}</b><br><br>
-      ✔️ اسم المشروع: <b>${text} Pro</b><br>
-      ✔️ المنتج الأساسي: حل مبتكر في مجال <b>${text}</b><br>
-      ✔️ خطوات التشغيل:<br>
-      - إنشاء صفحة هبوط<br>
-      - إطلاق محتوى يومي<br>
-      - جذب الجمهور + بيع الخدمة<br><br>
-
-      <b>🔗 أدوات مهمة (روابط ربح):</b><br>
-      • <a href="${tools.shopify}" target="_blank">متجر Shopify</a><br>
-      • <a href="${tools.hostinger}" target="_blank">استضافة Hostinger</a><br>
-      • <a href="${tools.canva}" target="_blank">تصميم Canva</a><br>
-      `;
-      break;
-
-    case 'content':
-      out = `
-      <b>📝 محتوى جاهز للنشر عن: ${text}</b><br><br>
-      - 3 منشورات جاهزة<br>
-      - 5 أفكار فيديوهات<br>
-      - 3 نصوص إعلانية جاهزة<br><br>
-
-      <b>أدوات مساعدة:</b><br>
-      • <a href="${tools.canva}" target="_blank">Canva</a><br>
-      `;
-      break;
-
-    case 'marketing':
-      out = `
-      <b>📈 خطة تسويق قوية لمشروع: ${text}</b><br><br>
-      - حملة إعلانية يومية<br>
-      - إنشاء محتوى 30 يوم<br>
-      - استخدام AI لتحسين الظهور<br><br>
-
-      <b>أدوات تسويق:</b><br>
-      • <a href="${tools.mailchimp}" target="_blank">Mailchimp</a><br>
-      • <a href="${tools.canva}" target="_blank">Canva</a><br>
-      `;
-      break;
-
-    case 'website':
-      out = `
-      <b>🌐 صفحة ويب جاهزة لفكرة: ${text}</b><br><br>
-      - شعار جاهز<br>
-      - ألوان وهوية<br>
-      - نصوص جاهزة للاستخدام<br><br>
-
-      <b>إنشاء موقعك:</b><br>
-      • <a href="${tools.wix}" target="_blank">إنشئ موقعك الآن من Wix</a><br>
-      • <a href="${tools.hostinger}" target="_blank">أفضل استضافة Hostinger</a><br>
-      `;
-      break;
-  }
-
-  r.innerHTML = out;
+function openAdmin() {
+    document.getElementById("adminModal").style.display = "flex";
 }
 
-function contact(){
-  window.open("https://wa.me/218910000000?text=أريد%20شراء%20خدمة%20الموقع%20والتسويق", "_blank");
+function closeAdmin() {
+    document.getElementById("adminModal").style.display = "none";
+}
+
+// التحقق من كلمة السر
+function checkPassword() {
+    const pass = document.getElementById("adminPass").value;
+    if (pass === ADMIN_PASSWORD) {
+        document.getElementById("stepPassword").style.display = "none";
+        document.getElementById("stepUpload").style.display = "block";
+    } else {
+        alert("❌ كلمة السر غير صحيحة");
+    }
+}
+
+// رفع صورة الباركود
+function uploadBarcode() {
+    const file = document.getElementById("barcodeFile").files[0];
+    if (!file) {
+        alert("اختر صورة أولاً");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const imgData = e.target.result;
+
+        document.getElementById("barcodeImage").src = imgData;
+        localStorage.setItem("barcodeImage", imgData);
+
+        alert("✅ تم تحديث الباركود بنجاح!");
+    };
+    reader.readAsDataURL(file);
 }
 </script>
+
 </body>
 </html>
