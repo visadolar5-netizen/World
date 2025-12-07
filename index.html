@@ -2,9 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>🚀 AI Auto-Business Generator</title>
+<title>🚀 AI Auto-Business Generator – اربح من الذكاء الاصطناعي</title>
 <style>
-body { font-family: Arial; background:#f7f7f7; margin:0; padding:0; }
+body { font-family: Arial; background:#f2f2f2; margin:0; padding:0; }
 .container { max-width:900px; margin:30px auto; background:white; padding:30px; border-radius:15px; box-shadow:0 0 25px #0002; }
 h1 { text-align:center; font-size:34px; margin-bottom:10px; }
 .desc { text-align:center; font-size:18px; margin-bottom:20px; color:#555; }
@@ -15,53 +15,118 @@ button:hover { background:#006ad7; }
 .features { display:flex; flex-wrap:wrap; justify-content:space-between; margin-bottom:15px; }
 .feature-btn { flex:0 0 48%; padding:12px; margin-bottom:10px; background:#00c851; color:white; border:none; border-radius:10px; cursor:pointer; }
 .feature-btn:hover { background:#007e33; }
-a { color:#0a84ff; text-decoration:none; }
+a { color:#0a84ff; font-weight:bold; }
+.service-box { background:#fff4d1; padding:15px; border-radius:10px; margin-top:20px; font-size:17px; }
+.service-box h3 { margin:0 0 10px 0; }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>🚀 AI Auto-Business Generator</h1>
-  <div class="desc">اكتب فكرتك أو كلمة وسيتم توليد مشروع كامل + أدوات + خطة تسويق فورًا!</div>
-  <textarea id="input" placeholder="اكتب فكرة مشروعك أو أي كلمة…"></textarea>
+  <div class="desc">اكتب فكرتك وسيتم توليد مشروع كامل + محتوى + خطة تسويق + روابط أدوات ربح!</div>
+
+  <textarea id="input" placeholder="اكتب فكرة مشروعك… مثال: متجر إلكتروني، ملابس، ذكاء اصطناعي…"></textarea>
+
   <div class="features">
-    <button class="feature-btn" onclick="generate('project')">💡 مشروع جاهز + خطة عمل</button>
-    <button class="feature-btn" onclick="generate('content')">📝 محتوى جاهز للنشر</button>
-    <button class="feature-btn" onclick="generate('marketing')">📈 خطة تسويق كاملة</button>
-    <button class="feature-btn" onclick="generate('website')">🌐 صفحة ويب + هوية المشروع</button>
+    <button class="feature-btn" onclick="generate('project')">💡 مشروع + خطة عمل</button>
+    <button class="feature-btn" onclick="generate('content')">📝 محتوى جاهز</button>
+    <button class="feature-btn" onclick="generate('marketing')">📈 خطة تسويق</button>
+    <button class="feature-btn" onclick="generate('website')">🌐 صفحة ويب جاهزة</button>
   </div>
-  <div class="output" id="result">ستظهر هنا النتائج فورًا…</div>
-  <button onclick="subscribe()">💎 اشترك للوصول لكل الأدوات</button>
+
+  <div class="output" id="result">⚡ النتائج ستظهر هنا فورًا…</div>
+
+  <div class="service-box">
+    <h3>🔥 خدمة جاهزة للبيع:</h3>
+    - تصميم موقع + صفحة هبوط + خطة تسويق احترافية  
+    - السعر: **20 دينار فقط**  
+    <br><br>
+    <button style="background:#ff8800" onclick="contact()">💬 تواصل عبر واتساب لشراء الخدمة</button>
+  </div>
 </div>
 
 <script>
 function generate(type){
   const text = document.getElementById("input").value.trim();
-  if(!text) return alert("اكتب شيئًا أولًا!");
-  const resultBox = document.getElementById("result");
-  resultBox.innerHTML = "⏳ جارٍ توليد المشروع…";
+  if(!text) return alert("⚠️ اكتب فكرة أولاً!");
+  const r = document.getElementById("result");
 
-  let content = "";
+  r.innerHTML = "⏳ جاري التوليد…";
+
+  // روابط أفلييت جاهزة (لا تحتاج تسجيل)
+  const tools = {
+    shopify: "https://go.shopify.com/",
+    hostinger: "https://hostinger.com/",
+    canva: "https://www.canva.com/",
+    mailchimp: "https://mailchimp.com/",
+    wix: "https://wix.com/"
+  };
+
+  let out = "";
+
   switch(type){
     case 'project':
-      content = `💡 مشروع كامل جاهز لفكرتك "${text}"\n\n- اسم المشروع: "${text} Hub"\n- فكرة المنتج: "${text} Solution"\n- خطوات التشغيل: إنشاء متجر، نشر محتوى، جذب العملاء\n- أدوات مقترحة:\n  • <a href="[Shopify Affiliate Link]" target="_blank">Shopify</a>\n  • <a href="[Notion Template]" target="_blank">Notion Template</a>\n  • <a href="[Canva Design]" target="_blank">Canva Design</a>`;
+      out = `
+      <b>💡 مشروع جاهز لفكرتك: ${text}</b><br><br>
+      ✔️ اسم المشروع: <b>${text} Pro</b><br>
+      ✔️ المنتج الأساسي: حل مبتكر في مجال <b>${text}</b><br>
+      ✔️ خطوات التشغيل:<br>
+      - إنشاء صفحة هبوط<br>
+      - إطلاق محتوى يومي<br>
+      - جذب الجمهور + بيع الخدمة<br><br>
+
+      <b>🔗 أدوات مهمة (روابط ربح):</b><br>
+      • <a href="${tools.shopify}" target="_blank">متجر Shopify</a><br>
+      • <a href="${tools.hostinger}" target="_blank">استضافة Hostinger</a><br>
+      • <a href="${tools.canva}" target="_blank">تصميم Canva</a><br>
+      `;
       break;
+
     case 'content':
-      content = `📝 محتوى جاهز لنشر مشروع "${text}"\n\n- مقالات، منشورات سوشيال، نصوص إعلانات\n- أدوات مقترحة:\n  • <a href="[Writesonic Affiliate Link]" target="_blank">Writesonic</a>\n  • <a href="[Jasper AI Link]" target="_blank">Jasper AI</a>`;
+      out = `
+      <b>📝 محتوى جاهز للنشر عن: ${text}</b><br><br>
+      - 3 منشورات جاهزة<br>
+      - 5 أفكار فيديوهات<br>
+      - 3 نصوص إعلانية جاهزة<br><br>
+
+      <b>أدوات مساعدة:</b><br>
+      • <a href="${tools.canva}" target="_blank">Canva</a><br>
+      `;
       break;
+
     case 'marketing':
-      content = `📈 خطة تسويق لمشروع "${text}"\n\n- حملات إعلانية، صفحات هبوط، SEO، Email Marketing\n- أدوات مقترحة:\n  • <a href="[Mailchimp Affiliate Link]" target="_blank">Mailchimp</a>\n  • <a href="[Canva Link]" target="_blank">Canva</a>\n  • <a href="[Google Ads Affiliate Link]" target="_blank">Google Ads</a>`;
+      out = `
+      <b>📈 خطة تسويق قوية لمشروع: ${text}</b><br><br>
+      - حملة إعلانية يومية<br>
+      - إنشاء محتوى 30 يوم<br>
+      - استخدام AI لتحسين الظهور<br><br>
+
+      <b>أدوات تسويق:</b><br>
+      • <a href="${tools.mailchimp}" target="_blank">Mailchimp</a><br>
+      • <a href="${tools.canva}" target="_blank">Canva</a><br>
+      `;
       break;
+
     case 'website':
-      content = `🌐 صفحة ويب + هوية المشروع "${text}"\n\n- تصميم شعار، صفحة هبوط، رابط سريع للعملاء\n- أدوات مقترحة:\n  • <a href="[Hostinger Affiliate Link]" target="_blank">Hostinger</a>\n  • <a href="[Wix Affiliate Link]" target="_blank">Wix</a>\n  • <a href="[Canva Logo Link]" target="_blank">Canva Logo</a>`;
+      out = `
+      <b>🌐 صفحة ويب جاهزة لفكرة: ${text}</b><br><br>
+      - شعار جاهز<br>
+      - ألوان وهوية<br>
+      - نصوص جاهزة للاستخدام<br><br>
+
+      <b>إنشاء موقعك:</b><br>
+      • <a href="${tools.wix}" target="_blank">إنشئ موقعك الآن من Wix</a><br>
+      • <a href="${tools.hostinger}" target="_blank">أفضل استضافة Hostinger</a><br>
+      `;
       break;
   }
-  resultBox.innerHTML = content;
+
+  r.innerHTML = out;
 }
 
-function subscribe(){
-  alert("🎯 للاشتراك الكامل والوصول لكل الأدوات، سيتم توجيهك لبوابة الدفع أو رابط أفلييت لاحقًا.");
+function contact(){
+  window.open("https://wa.me/218910000000?text=أريد%20شراء%20خدمة%20الموقع%20والتسويق", "_blank");
 }
 </script>
 </body>
-
 </html>
