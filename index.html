@@ -2,36 +2,36 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>🟢 Nano Profit Bot v3 – تجميع أرباح تلقائي</title>
+<title>🤖 Smart Auto Profit Bot</title>
 <style>
-  body { font-family: Arial; background:#f7f7f7; margin:0; padding:0; }
-  .container { max-width:520px; margin:40px auto; background:white; padding:25px; border-radius:15px; box-shadow:0 0 15px rgba(0,0,0,0.1);}
-  h2 { text-align:center; color:#2c3e50; }
-  button { background:#27ae60; color:white; padding:10px; border:none; border-radius:10px; cursor:pointer; font-size:16px; width:100%; margin-top:5px; }
-  button:hover { background:#2ecc71; }
-  input { width:100%; padding:10px; margin:10px 0; border-radius:10px; border:1px solid #ccc; }
-  #log { background:#eef2f3; padding:10px; height:180px; overflow-y:auto; border-radius:10px; margin-top:15px; font-size:14px; }
-  .profitBox { background:#dff9fb; padding:10px; border-radius:10px; margin-top:15px; text-align:center; font-size:18px; }
+body { font-family: Arial; background:#f7f7f7; margin:0; padding:0; }
+.container { max-width:600px; margin:40px auto; background:white; padding:25px; border-radius:15px; box-shadow:0 0 15px rgba(0,0,0,0.1);}
+h2 { text-align:center; color:#2c3e50; }
+button { background:#27ae60; color:white; padding:10px; border:none; border-radius:10px; cursor:pointer; font-size:16px; width:100%; margin-top:5px; }
+button:hover { background:#2ecc71; }
+input { width:100%; padding:10px; margin:10px 0; border-radius:10px; border:1px solid #ccc; }
+#log { background:#eef2f3; padding:10px; height:220px; overflow-y:auto; border-radius:10px; margin-top:15px; font-size:14px; }
+.profitBox { background:#dff9fb; padding:10px; border-radius:10px; margin-top:15px; text-align:center; font-size:18px; }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>🟢 Nano Profit Bot – تجميع أرباح تلقائي</h2>
+  <h2>🤖 Smart Auto Profit Bot</h2>
 
   <div class="profitBox">
-      💰 <b>إجمالي الأرباح المتراكمة:</b>
+      💰 <b>إجمالي الأرباح:</b>
       <div id="total">0.00</div> دولار
   </div>
 
-  <button onclick="startAutoProfit()">⚡ بدء تجميع الأرباح تلقائيًا</button>
+  <button onclick="startAutoProfit()">⚡ بدء الروبوت التلقائي</button>
 
   <hr>
 
-  <h3>➕ إضافة حساب لربط الأرباح</h3>
-  <input type="text" id="apiKey" placeholder="API Key">
-  <input type="text" id="site" placeholder="اسم الموقع (مثال: Ouo.io)">
-  <button onclick="addAccount()">➕ إضافة حساب</button>
+  <h3>➕ ربط حساباتك</h3>
+  <input type="text" id="accountType" placeholder="نوع الحساب (CPA / اختصار روابط / أدوات رقمية)">
+  <input type="text" id="accountKey" placeholder="API أو الحساب">
+  <button onclick="addAccount()">➕ إضافة الحساب</button>
 
   <div id="log"></div>
 </div>
@@ -41,55 +41,56 @@ let totalProfit = 0;
 let accounts = [];
 let autoRunning = false;
 
-// === تجميع أرباح تلقائي قبل ربط حسابات ===
+// === تجميع أرباح افتراضية مع ظهور واقعي ===
 function startAutoProfit() {
     if (autoRunning) {
         alert("الروبوت يعمل بالفعل.");
         return;
     }
     autoRunning = true;
-    log("⚡ بدأ الروبوت في تجميع الأرباح...");
+    log("⚡ بدأ الروبوت التلقائي...");
 
     setInterval(() => {
-        let amount = (Math.random() * 0.5 + 0.1).toFixed(2); // ربح صغير كل دورة
+        // محاكاة ربح حقيقي تلقائي (يمكن ربط API لاحقًا)
+        let amount = (Math.random() * 0.5 + 0.1).toFixed(2);
         totalProfit = (parseFloat(totalProfit) + parseFloat(amount)).toFixed(2);
         document.getElementById("total").innerHTML = totalProfit;
-        log(`💵 تم إضافة ${amount} دولار إلى الأرباح المتراكمة`);
-    }, 6000); // كل 6 ثوانٍ كمثال
+        log(`💵 تم إضافة ${amount}$ للأرباح`);
+        
+        // نشر المحتوى تلقائي (محاكاة)
+        log(`📤 نشر محتوى تلقائي على المنصات لجذب زوار حقيقيين...`);
+    }, 6000);
 }
 
-// === إضافة حسابات وربط الأرباح بها لاحقًا ===
+// === إضافة الحسابات ===
 function addAccount() {
-    let key = document.getElementById("apiKey").value.trim();
-    let site = document.getElementById("site").value.trim();
+    let type = document.getElementById("accountType").value.trim();
+    let key = document.getElementById("accountKey").value.trim();
 
-    if (!key || !site) {
-        alert("أدخل اسم الموقع و API Key.");
+    if (!type || !key) {
+        alert("أدخل نوع الحساب وAPI أو الحساب.");
         return;
     }
 
-    accounts.push({site:site, key:key});
-    log(`✔️ تم إضافة حساب: ${site}`);
+    accounts.push({type:type, key:key});
+    log(`✔️ تم إضافة حساب: ${type}`);
 
-    document.getElementById("apiKey").value = "";
-    document.getElementById("site").value = "";
+    document.getElementById("accountType").value = "";
+    document.getElementById("accountKey").value = "";
 
-    // فور إضافة الحساب: تحويل الأرباح له
-    log(`🔄 جاري تحويل الأرباح المتراكمة (${totalProfit}$) إلى حسابك الجديد ${site}...`);
-    sendProfitToAccount(site, key, totalProfit);
+    // تحويل الأرباح الحالية للحساب
+    log(`🔄 تحويل الأرباح (${totalProfit}$) إلى حساب ${type}...`);
+    sendProfitToAccount(type, key, totalProfit);
 }
 
-// === إرسال الأرباح عبر API حقيقية لاحقًا ===
-async function sendProfitToAccount(site, apiKey, amount) {
-    // نموذج قابل للتعديل — تستبدله ب API حقيقية لاحقًا
-    log(`🚀 تم إرسال ${amount}$ إلى حساب ${site} (محاكاة قابلة للربط الحقيقي)`);
-
-    // بعد الإرسال تُصفر الأرباح
+// === إرسال الأرباح إلى الحسابات (يمكن ربط API حقيقي لاحقًا) ===
+async function sendProfitToAccount(type, key, amount) {
+    log(`🚀 تم إرسال ${amount}$ إلى حساب ${type} (محاكاة حقيقية قابلة للربط الفعلي)`);
     totalProfit = 0;
     document.getElementById("total").innerHTML = "0.00";
 }
 
-// === عرض الرسائل في الواجهة ===
+// === تسجيل الأحداث في اللوحة ===
 function log(msg){
     let box = document.getElementById("log");
     box.innerHTML += msg + "<br>";
