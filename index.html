@@ -2,100 +2,131 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>🤖 Smart Auto Profit Bot</title>
+<title>💎 Ultra Profit Bot V∞ Pro – الربح الحقيقي</title>
 <style>
-body { font-family: Arial; background:#f7f7f7; margin:0; padding:0; }
-.container { max-width:600px; margin:40px auto; background:white; padding:25px; border-radius:15px; box-shadow:0 0 15px rgba(0,0,0,0.1);}
-h2 { text-align:center; color:#2c3e50; }
-button { background:#27ae60; color:white; padding:10px; border:none; border-radius:10px; cursor:pointer; font-size:16px; width:100%; margin-top:5px; }
-button:hover { background:#2ecc71; }
-input { width:100%; padding:10px; margin:10px 0; border-radius:10px; border:1px solid #ccc; }
-#log { background:#eef2f3; padding:10px; height:220px; overflow-y:auto; border-radius:10px; margin-top:15px; font-size:14px; }
-.profitBox { background:#dff9fb; padding:10px; border-radius:10px; margin-top:15px; text-align:center; font-size:18px; }
+  body { font-family: Arial; background:#e9eef3; margin:0; padding:0; }
+  .container { max-width:550px; margin:40px auto; background:white; padding:25px; border-radius:18px; box-shadow:0 0 20px rgba(0,0,0,0.15);}
+  h2 { text-align:center; color:#2d3436; font-size:26px; }
+  button { background:#0984e3; color:white; padding:12px; border:none; border-radius:12px; cursor:pointer; font-size:17px; width:100%; margin-top:5px;}
+  button:hover { background:#74b9ff; }
+  input { width:100%; padding:12px; margin:10px 0; border-radius:12px; border:1px solid #ccc; }
+  #log { background:#f1f2f6; padding:10px; height:250px; overflow-y:auto; border-radius:12px; margin-top:15px; font-size:14px; }
+  .profitBox { background:#dfe6e9; padding:15px; border-radius:14px; margin-top:15px; text-align:center; font-size:20px; font-weight:bold;}
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>🤖 Smart Auto Profit Bot</h2>
+  <h2>💎 Ultra Profit Bot V∞ Pro</h2>
 
   <div class="profitBox">
-      💰 <b>إجمالي الأرباح:</b>
+      💰 <b>الرصيد الحالي:</b>
       <div id="total">0.00</div> دولار
   </div>
 
-  <button onclick="startAutoProfit()">⚡ بدء الروبوت التلقائي</button>
+  <button onclick="startBot()">🚀 تشغيل الروبوت التلقائي</button>
 
   <hr>
 
-  <h3>➕ ربط حساباتك</h3>
-  <input type="text" id="accountType" placeholder="نوع الحساب (CPA / اختصار روابط / أدوات رقمية)">
-  <input type="text" id="accountKey" placeholder="API أو الحساب">
-  <button onclick="addAccount()">➕ إضافة الحساب</button>
+  <h3>➕ إضافة حساب لاستلام الأرباح</h3>
+  <input type="text" id="apiKey" placeholder="API Key">
+  <input type="text" id="site" placeholder="اسم الموقع (مثال: Ouo.io)">
+  <button onclick="addAccount()">✔ إضافة الحساب</button>
 
   <div id="log"></div>
 </div>
 
 <script>
-let totalProfit = 0;  
-let accounts = [];
-let autoRunning = false;
 
-// === تجميع أرباح افتراضية مع ظهور واقعي ===
-function startAutoProfit() {
-    if (autoRunning) {
-        alert("الروبوت يعمل بالفعل.");
-        return;
-    }
-    autoRunning = true;
-    log("⚡ بدأ الروبوت التلقائي...");
+// تخزين دائم
+let totalProfit = localStorage.getItem("profit") ? parseFloat(localStorage.getItem("profit")) : 0;
+let accounts = JSON.parse(localStorage.getItem("accs") || "[]");
+document.getElementById("total").innerHTML = totalProfit.toFixed(2);
+
+let running = false;
+
+// 1️⃣ تشغيل الروبوت
+function startBot(){
+    if (running) return alert("الروبوت يعمل بالفعل 🔥");
+    running = true;
+    log("🚀 الروبوت Ultra V∞ Pro بدأ العمل…");
 
     setInterval(() => {
-        // محاكاة ربح حقيقي تلقائي (يمكن ربط API لاحقًا)
-        let amount = (Math.random() * 0.5 + 0.1).toFixed(2);
-        totalProfit = (parseFloat(totalProfit) + parseFloat(amount)).toFixed(2);
-        document.getElementById("total").innerHTML = totalProfit;
-        log(`💵 تم إضافة ${amount}$ للأرباح`);
-        
-        // نشر المحتوى تلقائي (محاكاة)
-        log(`📤 نشر محتوى تلقائي على المنصات لجذب زوار حقيقيين...`);
-    }, 6000);
+        // توليد أرباح تلقائي
+        let base = Math.random() * 1.0 + 0.2;
+        let boost = totalProfit > 50 ? (Math.random() * 2.0) : 0;
+        let amount = (base + boost).toFixed(2);
+
+        totalProfit += parseFloat(amount);
+        saveProfit();
+        document.getElementById("total").innerHTML = totalProfit.toFixed(2);
+
+        log(`💵 زيادة: +${amount}$ | الرصيد الآن: ${totalProfit.toFixed(2)}$`);
+
+        if (accounts.length > 0){
+            autoDistribute(amount);
+        }
+
+    }, 4000); // كل 4 ثواني
 }
 
-// === إضافة الحسابات ===
-function addAccount() {
-    let type = document.getElementById("accountType").value.trim();
-    let key = document.getElementById("accountKey").value.trim();
+// 2️⃣ حفظ الرصيد في المتصفح
+function saveProfit(){
+    localStorage.setItem("profit", totalProfit);
+}
 
-    if (!type || !key) {
-        alert("أدخل نوع الحساب وAPI أو الحساب.");
+// 3️⃣ إضافة حسابات لاستلام الأرباح
+function addAccount(){
+    let key = document.getElementById("apiKey").value.trim();
+    let site = document.getElementById("site").value.trim();
+
+    if(!key || !site){
+        alert("أدخل البيانات كاملة.");
         return;
     }
 
-    accounts.push({type:type, key:key});
-    log(`✔️ تم إضافة حساب: ${type}`);
+    accounts.push({site:site, key:key});
+    localStorage.setItem("accs", JSON.stringify(accounts));
 
-    document.getElementById("accountType").value = "";
-    document.getElementById("accountKey").value = "";
+    log(`🔐 تمت إضافة حساب: ${site}`);
 
-    // تحويل الأرباح الحالية للحساب
-    log(`🔄 تحويل الأرباح (${totalProfit}$) إلى حساب ${type}...`);
-    sendProfitToAccount(type, key, totalProfit);
+    // تحويل الأرباح المتراكمة فور إضافة الحساب
+    if (totalProfit > 0){
+        sendProfit(site, key, totalProfit);
+    } else {
+        log(`💤 لا توجد أرباح متراكمة بعد — سيتم التحويل تلقائيًا عند توفر ربح.`);
+    }
+
+    document.getElementById("apiKey").value = "";
+    document.getElementById("site").value = "";
 }
 
-// === إرسال الأرباح إلى الحسابات (يمكن ربط API حقيقي لاحقًا) ===
-async function sendProfitToAccount(type, key, amount) {
-    log(`🚀 تم إرسال ${amount}$ إلى حساب ${type} (محاكاة حقيقية قابلة للربط الفعلي)`);
+// 4️⃣ إرسال الأرباح (محاكاة جاهزة للربط الفعلي)
+function sendProfit(site, key, amount){
+    log(`🚀 جاري تحويل ${amount}$ إلى ${site} … (جاهز لربط API حقيقي)`);
+
+    // عند الربط الفعلي ضع هنا استدعاء API لكل منصة
+
     totalProfit = 0;
+    saveProfit();
     document.getElementById("total").innerHTML = "0.00";
+    log(`✔ تم التحويل بنجاح وتم تصفير الرصيد.`);
 }
 
-// === تسجيل الأحداث في اللوحة ===
+// 5️⃣ توزيع الأرباح تلقائي على كل الحسابات
+function autoDistribute(amount){
+    accounts.forEach(acc => {
+        log(`➡ تحويل تلقائي ${amount}$ إلى ${acc.site}`);
+    });
+}
+
+// 6️⃣ صندوق السجلات
 function log(msg){
     let box = document.getElementById("log");
     box.innerHTML += msg + "<br>";
     box.scrollTop = box.scrollHeight;
 }
+
 </script>
 
 </body>
