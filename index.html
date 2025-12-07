@@ -2,136 +2,98 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>بوابة الدفع بالباركود</title>
+<title>🟢 Nano Profit Bot v3 – تجميع أرباح تلقائي</title>
 <style>
-body { font-family: Arial; background:#fafafa; margin:0; padding:0; }
-.container { max-width:400px; margin:40px auto; background:white; padding:20px; border-radius:15px; text-align:center; box-shadow:0 0 15px rgba(0,0,0,0.1); }
-
-.qr-box img { width:250px; }
-
-.admin-btn {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background:#333;
-    color:white;
-    padding:12px 15px;
-    border-radius:50%;
-    cursor:pointer;
-    font-size:20px;
-}
-
-.modal {
-    display:none;
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background:rgba(0,0,0,0.5);
-    justify-content:center;
-    align-items:center;
-}
-
-.modal-content {
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    width:300px;
-    text-align:center;
-}
-input[type=file], input[type=password] {
-    width:100%;
-    padding:10px;
-    margin:10px 0;
-}
-button { padding:10px 15px; margin-top:10px; }
+  body { font-family: Arial; background:#f7f7f7; margin:0; padding:0; }
+  .container { max-width:520px; margin:40px auto; background:white; padding:25px; border-radius:15px; box-shadow:0 0 15px rgba(0,0,0,0.1);}
+  h2 { text-align:center; color:#2c3e50; }
+  button { background:#27ae60; color:white; padding:10px; border:none; border-radius:10px; cursor:pointer; font-size:16px; width:100%; margin-top:5px; }
+  button:hover { background:#2ecc71; }
+  input { width:100%; padding:10px; margin:10px 0; border-radius:10px; border:1px solid #ccc; }
+  #log { background:#eef2f3; padding:10px; height:180px; overflow-y:auto; border-radius:10px; margin-top:15px; font-size:14px; }
+  .profitBox { background:#dff9fb; padding:10px; border-radius:10px; margin-top:15px; text-align:center; font-size:18px; }
 </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>🔵 بوابة الدفع عبر الباركود</h2>
-    <p>امسح الباركود لإتمام عملية الدفع</p>
+  <h2>🟢 Nano Profit Bot – تجميع أرباح تلقائي</h2>
 
-    <div class="qr-box">
-        <img id="barcodeImage" src="" alt="Barcode">
-    </div>
-</div>
+  <div class="profitBox">
+      💰 <b>إجمالي الأرباح المتراكمة:</b>
+      <div id="total">0.00</div> دولار
+  </div>
 
-<!-- زر الأدمن -->
-<div class="admin-btn" onclick="openAdmin()">⚙️</div>
+  <button onclick="startAutoProfit()">⚡ بدء تجميع الأرباح تلقائيًا</button>
 
-<!-- نافذة لوحة التحكم -->
-<div id="adminModal" class="modal">
-    <div class="modal-content">
+  <hr>
 
-        <div id="stepPassword">
-            <h3>دخول الأدمن</h3>
-            <input type="password" id="adminPass" placeholder="أدخل كلمة السر">
-            <button onclick="checkPassword()">دخول</button>
-        </div>
+  <h3>➕ إضافة حساب لربط الأرباح</h3>
+  <input type="text" id="apiKey" placeholder="API Key">
+  <input type="text" id="site" placeholder="اسم الموقع (مثال: Ouo.io)">
+  <button onclick="addAccount()">➕ إضافة حساب</button>
 
-        <div id="stepUpload" style="display:none;">
-            <h3>تغيير صورة الباركود</h3>
-            <input type="file" id="barcodeFile" accept="image/*">
-            <button onclick="uploadBarcode()">حفظ</button>
-        </div>
-
-        <button onclick="closeAdmin()">إغلاق</button>
-    </div>
+  <div id="log"></div>
 </div>
 
 <script>
-// كلمة السر السرّية (يمكنك تغييرها)
-const ADMIN_PASSWORD = "1234";
+let totalProfit = 0;  
+let accounts = [];
+let autoRunning = false;
 
-// تحميل الباركود من التخزين إن وجد
-window.onload = function() {
-    const savedBarcode = localStorage.getItem("barcodeImage");
-    if (savedBarcode) {
-        document.getElementById("barcodeImage").src = savedBarcode;
-    } else {
-        // صورة افتراضية
-        document.getElementById("barcodeImage").src = "https://via.placeholder.com/250x250?text=Barcode";
+// === تجميع أرباح تلقائي قبل ربط حسابات ===
+function startAutoProfit() {
+    if (autoRunning) {
+        alert("الروبوت يعمل بالفعل.");
+        return;
     }
-};
+    autoRunning = true;
+    log("⚡ بدأ الروبوت في تجميع الأرباح...");
 
-function openAdmin() {
-    document.getElementById("adminModal").style.display = "flex";
+    setInterval(() => {
+        let amount = (Math.random() * 0.5 + 0.1).toFixed(2); // ربح صغير كل دورة
+        totalProfit = (parseFloat(totalProfit) + parseFloat(amount)).toFixed(2);
+        document.getElementById("total").innerHTML = totalProfit;
+        log(`💵 تم إضافة ${amount} دولار إلى الأرباح المتراكمة`);
+    }, 6000); // كل 6 ثوانٍ كمثال
 }
 
-function closeAdmin() {
-    document.getElementById("adminModal").style.display = "none";
-}
+// === إضافة حسابات وربط الأرباح بها لاحقًا ===
+function addAccount() {
+    let key = document.getElementById("apiKey").value.trim();
+    let site = document.getElementById("site").value.trim();
 
-// التحقق من كلمة السر
-function checkPassword() {
-    const pass = document.getElementById("adminPass").value;
-    if (pass === ADMIN_PASSWORD) {
-        document.getElementById("stepPassword").style.display = "none";
-        document.getElementById("stepUpload").style.display = "block";
-    } else {
-        alert("❌ كلمة السر غير صحيحة");
-    }
-}
-
-// رفع صورة الباركود
-function uploadBarcode() {
-    const file = document.getElementById("barcodeFile").files[0];
-    if (!file) {
-        alert("اختر صورة أولاً");
+    if (!key || !site) {
+        alert("أدخل اسم الموقع و API Key.");
         return;
     }
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const imgData = e.target.result;
+    accounts.push({site:site, key:key});
+    log(`✔️ تم إضافة حساب: ${site}`);
 
-        document.getElementById("barcodeImage").src = imgData;
-        localStorage.setItem("barcodeImage", imgData);
+    document.getElementById("apiKey").value = "";
+    document.getElementById("site").value = "";
 
-        alert("✅ تم تحديث الباركود بنجاح!");
-    };
-    reader.readAsDataURL(file);
+    // فور إضافة الحساب: تحويل الأرباح له
+    log(`🔄 جاري تحويل الأرباح المتراكمة (${totalProfit}$) إلى حسابك الجديد ${site}...`);
+    sendProfitToAccount(site, key, totalProfit);
+}
+
+// === إرسال الأرباح عبر API حقيقية لاحقًا ===
+async function sendProfitToAccount(site, apiKey, amount) {
+    // نموذج قابل للتعديل — تستبدله ب API حقيقية لاحقًا
+    log(`🚀 تم إرسال ${amount}$ إلى حساب ${site} (محاكاة قابلة للربط الحقيقي)`);
+
+    // بعد الإرسال تُصفر الأرباح
+    totalProfit = 0;
+    document.getElementById("total").innerHTML = "0.00";
+}
+
+// === عرض الرسائل في الواجهة ===
+function log(msg){
+    let box = document.getElementById("log");
+    box.innerHTML += msg + "<br>";
+    box.scrollTop = box.scrollHeight;
 }
 </script>
 
