@@ -1,121 +1,77 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LibyaLive Hub — API متكاملة</title>
+<meta charset="UTF-8">
+<title>منصة أفلييت ذكية</title>
 <style>
-:root{--accent:#0b5cff;--bg:#f6f8fb}
-html,body{height:100%;margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--bg);color:#111}
-.container{max-width:1100px;margin:22px auto;padding:18px;background:#fff;border-radius:12px;box-shadow:0 6px 20px rgba(10,20,40,0.06)}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{display:flex;gap:10px;align-items:center}
-.logo{width:52px;height:52px;background:linear-gradient(135deg,var(--accent),#00bfa6);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
-h1{font-size:20px;margin:0}
-.controls{display:flex;gap:10px;align-items:center}
-button{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
-.card{background:#fff;border:1px solid #eef2ff;padding:14px;border-radius:10px;min-height:90px}
-.card h3{margin:0 0 6px 0;font-size:14px}
-small{color:#666}
-footer{margin-top:18px;text-align:center;color:#777;font-size:13px}
-@media(max-width:600px){.grid{grid-template-columns:1fr}.brand h1{font-size:16px}}
+body{font-family:Arial;background:#f0f2f5;margin:0;padding:0;}
+.container{max-width:900px;margin:40px auto;background:white;padding:25px;border-radius:15px;text-align:center;box-shadow:0 5px 15px rgba(0,0,0,0.1);}
+#products,#shareTexts{margin-top:20px;text-align:left;}
+.product{border-bottom:1px solid #ddd;padding:12px;margin-bottom:10px;}
+.product a{color:#007bff;text-decoration:none;}
+.product a:hover{text-decoration:underline;}
+.shareText{background:#f7f7f7;padding:10px;margin-bottom:10px;border-radius:5px;}
+input,select,button{padding:8px;margin:5px;border-radius:5px;border:1px solid #ccc;}
+button{background:#28a745;color:white;border:none;cursor:pointer;}
+button:hover{background:#218838;}
 </style>
 </head>
 <body>
 <div class="container">
-  <header>
-    <div class="brand">
-      <div class="logo">LL</div>
-      <div>
-        <h1>LibyaLive Hub</h1>
-        <small>سعر الصرف مباشر + API</small>
-      </div>
-    </div>
-    <div class="controls">
-      <div class="badge" id="lastUpdate">آخر تحديث: ---</div>
-      <button id="refreshBtn">تحديث الآن</button>
-    </div>
-  </header>
+<h1>منصة أفلييت ذكية</h1>
 
-  <div class="grid">
-    <div class="card">
-      <h3>سعر الدولار — السوق الموازي (Fulus.ly)</h3>
-      <div id="fulusValue" style="font-size:18px;font-weight:700">--- دينار</div>
-      <small id="fulusSource">المصدر: ---</small>
-    </div>
-    <div class="card">
-      <h3>سعر الدولار الرسمي (USD → LYD)</h3>
-      <div id="hostValue" style="font-size:18px;font-weight:700">--- دينار</div>
-      <small id="hostSource">المصدر: ---</small>
-    </div>
-  </div>
-  <footer>نسخة API — LibyaLive Hub</footer>
+<h2>فلتر البحث</h2>
+<input type="text" id="search" placeholder="ابحث بالكلمة المفتاحية">
+<button onclick="filterProducts()">تصفية</button>
+
+<h2>المنتجات</h2>
+<div id="products"></div>
+
+<h2>نصوص جاهزة للنشر</h2>
+<div id="shareTexts"></div>
 </div>
 
 <script>
-/* ---------------------------
-   1️⃣ Fulus.ly — السوق الموازي LYD
-   ضع مفتاحك الخاص هنا
----------------------------- */
-const FULUS_API_URL = 'https://fulus.ly/api/v1/rates/current';
-const FULUS_API_KEY = 'YOUR_FULUS_API_KEY'; // ضع مفتاحك هنا
+// ======== بيانات المنتجات التجريبية (استبدل بروابطك الحقيقية) ========
+const products = [
+  { name:"لابتوب Amazon 1", price:799, link:"https://amazon.com/product1?tag=YOUR_TAG", platform:"Amazon" },
+  { name:"سماعات Amazon", price:199, link:"https://amazon.com/product2?tag=YOUR_TAG", platform:"Amazon" },
+  { name:"لابتوب AliExpress 1", price:699, link:"https://aliexpress.com/item/1?aff_trk=YOUR_TRACKING", platform:"AliExpress" },
+  { name:"سماعات AliExpress", price:149, link:"https://aliexpress.com/item/2?aff_trk=YOUR_TRACKING", platform:"AliExpress" }
+];
 
-async function fetchFulusLYD() {
-  try {
-    const res = await fetch(FULUS_API_URL, {
-      headers: { Authorization: `Bearer ${FULUS_API_KEY}` }
-    });
-    const data = await res.json();
-    return { value: data.data.rate, source: 'Fulus.ly' };
-  } catch (e) {
-    console.error('خطأ Fulus.ly:', e);
-    return { value: '---', source: 'خطأ' };
-  }
+// ======== عرض المنتجات ========
+function displayProducts(list){
+  const divProducts = document.getElementById('products');
+  const divShare = document.getElementById('shareTexts');
+  divProducts.innerHTML='';
+  divShare.innerHTML='';
+  list.forEach(p=>{
+    const prodDiv=document.createElement('div');
+    prodDiv.className='product';
+    prodDiv.innerHTML=`
+      <h3>${p.name} (${p.platform})</h3>
+      <p>السعر: $${p.price}</p>
+      <a href="${p.link}" target="_blank">شراء الآن</a>
+    `;
+    divProducts.appendChild(prodDiv);
+
+    const shareDiv=document.createElement('div');
+    shareDiv.className='shareText';
+    shareDiv.innerText=`🚀 اشترِ الآن ${p.name} بسعر $${p.price} عبر هذا الرابط: ${p.link}`;
+    divShare.appendChild(shareDiv);
+  });
 }
 
-/* ---------------------------
-   2️⃣ exchangerate.host — صرف عالمي
-   مجاني، لا يحتاج API Key
----------------------------- */
-const EXCHANGE_HOST_URL = 'https://api.exchangerate.host/latest?base=USD&symbols=LYD';
-
-async function fetchExchangeHost() {
-  try {
-    const res = await fetch(EXCHANGE_HOST_URL);
-    const data = await res.json();
-    return { value: data.rates.LYD.toFixed(3), source: 'exchangerate.host' };
-  } catch (e) {
-    console.error('خطأ exchangerate.host:', e);
-    return { value: '---', source: 'خطأ' };
-  }
+// ======== فلترة المنتجات ========
+function filterProducts(){
+  const keyword=document.getElementById('search').value.toLowerCase();
+  const filtered = products.filter(p => p.name.toLowerCase().includes(keyword));
+  displayProducts(filtered);
 }
 
-/* ---------------------------
-   تحديث القيم في الصفحة
----------------------------- */
-async function updateAllRates() {
-  document.getElementById('lastUpdate').textContent = 'آخر تحديث: ' + new Date().toLocaleString('ar-EG');
-
-  const fulus = await fetchFulusLYD();
-  document.getElementById('fulusValue').textContent = fulus.value + ' دينار';
-  document.getElementById('fulusSource').textContent = 'المصدر: ' + fulus.source;
-
-  const host = await fetchExchangeHost();
-  document.getElementById('hostValue').textContent = host.value + ' دينار';
-  document.getElementById('hostSource').textContent = 'المصدر: ' + host.source;
-}
-
-/* ---------------------------
-   تحديث تلقائي كل 10 دقائق
----------------------------- */
-updateAllRates();
-setInterval(updateAllRates, 10 * 60 * 1000);
-
-/* ---------------------------
-   زر التحديث اليدوي
----------------------------- */
-document.getElementById('refreshBtn').addEventListener('click', updateAllRates);
+// ======== عرض جميع المنتجات عند الفتح ========
+displayProducts(products);
 </script>
 </body>
 </html>
