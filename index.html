@@ -3,249 +3,257 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>مولّد المشروع العبقري — AI Auto-Biz Generator (بدون إنترنت)</title>
+  <title>LibyaLive Hub — كل شيء لليبيين</title>
   <style>
-    :root{--bg:#0f1724;--card:#0b1220;--accent:#10b981;--muted:#9aa4b2;--glass:rgba(255,255,255,0.03)}
-    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,system-ui,-apple-system,'Helvetica Neue',Arial}
-    body{background:linear-gradient(180deg,#071025 0%, #071122 60%);color:#e6eef6;padding:28px}
-    .wrap{max-width:1100px;margin:0 auto}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-    header h1{font-size:20px;margin:0}
-    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 30px rgba(2,6,23,0.6);margin-bottom:16px}
-    .controls{display:flex;gap:10px;flex-wrap:wrap}
-    select,input,button,textarea{background:var(--glass);border:1px solid rgba(255,255,255,0.04);color:inherit;padding:10px;border-radius:8px}
-    button{cursor:pointer}
-    .grid{display:grid;grid-template-columns:1fr 420px;gap:16px}
-    .logo-preview{display:flex;align-items:center;gap:10px}
-    .logo-box{width:84px;height:84px;border-radius:12px;background:linear-gradient(135deg,#072 0%, #024 100%);display:flex;align-items:center;justify-content:center;font-weight:700}
-    .section-title{color:var(--muted);font-size:12px;margin-bottom:8px}
-    pre{white-space:pre-wrap;word-break:break-word;font-family:inherit;background:transparent;border:0;margin:0}
-    .download {display:flex;gap:8px;flex-wrap:wrap}
-    .pill{background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:999px;font-size:13px}
-    footer{margin-top:18px;color:var(--muted);font-size:13px}
-    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+    /* بسيط وجميل — Tailwind-like utilities غير مستخدمة لتسهيل الـ single file */
+    :root{--accent:#0b5cff;--bg:#f6f8fb}
+    html,body{height:100%;margin:0;font-family:Tahoma,Arial, sans-serif;background:var(--bg);color:#111}
+    .container{max-width:1100px;margin:22px auto;padding:18px;background:#fff;border-radius:12px;box-shadow:0 6px 20px rgba(10,20,40,0.06)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:52px;height:52px;background:linear-gradient(135deg,var(--accent),#00bfa6);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    h1{font-size:20px;margin:0}
+    .controls{display:flex;gap:10px;align-items:center}
+    button{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+    .card{background:#fff;border:1px solid #eef2ff;padding:14px;border-radius:10px;min-height:90px}
+    .card h3{margin:0 0 6px 0;font-size:14px}
+    small{color:#666}
+    footer{margin-top:18px;text-align:center;color:#777;font-size:13px}
+    /* responsive */
+    @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:600px){.grid{grid-template-columns:1fr}.brand h1{font-size:16px}}
+    /* Admin modal */
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35)}
+    .modal.active{display:flex}
+    .modal .box{background:#fff;padding:18px;border-radius:12px;min-width:320px;max-width:640px}
+    .row{display:flex;gap:8px;align-items:center}
+    input[type=text],select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #ddd}
+    .top-notice{background:#fff7e6;border:1px solid #ffe2b3;padding:10px;border-radius:8px;margin-top:12px}
+    .badge{background:#eef6ff;color:#0b5cff;padding:6px 8px;border-radius:8px;font-weight:600}
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="container">
     <header>
-      <h1>مولّد المشروع العبقري — ينتج فكرة، صفحة هبوط، شعار، واستراتيجية ربح</h1>
-      <div class="pill">بدون إنترنت • جاهز للرفع على GitHub</div>
+      <div class="brand">
+        <div class="logo">LL</div>
+        <div>
+          <h1>LibyaLive Hub</h1>
+          <small>كل ما يحتاجه الليبي — محدث تلقائياً</small>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="badge" id="lastUpdate">آخر تحديث: ---</div>
+        <button id="openAdmin">لوحة الأدمن</button>
+      </div>
     </header>
 
-    <div class="card controls">
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;width:100%">
-        <select id="aud" aria-label="السوق المستهدف">
-          <option value="المستخدمون العرب">المستخدمون العرب</option>
-          <option value="الشركات الصغيرة">الشركات الصغيرة</option>
-          <option value="السفر والسياحة">السفر والسياحة</option>
-          <option value="التعليم">التعليم</option>
-          <option value="الزراعة">الزراعة</option>
-          <option value="التجارة الإلكترونية">التجارة الإلكترونية</option>
-        </select>
+    <div class="top-notice" id="topNotice">تحميل البيانات... انتظر ثانيتين.</div>
 
-        <select id="style">
-          <option value="خدمة رقمية">خدمة رقمية</option>
-          <option value="اشتراك شهري">اشتراك شهري</option>
-          <option value="منتج رقمي">منتج رقمي (دورة / كتاب) </option>
-          <option value="سوق محلي">سوق محلي / فِرق عمل" >سوق محلي</option>
-        </select>
+    <section class="grid" aria-label="محتويات">
+      <article class="card" id="dollarCard">
+        <h3>سعر الدولار</h3>
+        <div id="dollarValue" style="font-size:18px;font-weight:700">--- دينار</div>
+        <small id="dollarSource">المصدر: محلي</small>
+      </article>
 
-        <input id="seed" placeholder="كلمة مفتاحية او اسم (اختياري)" />
+      <article class="card" id="liquidityCard">
+        <h3>السيولة اليوم</h3>
+        <div id="liquidityValue">---</div>
+        <small id="liquiditySource">المصدر: محرك السيولة</small>
+      </article>
 
-        <button id="gen">انتج فكرة عبقرية</button>
-        <button id="regen">أعد توليد</button>
-        <button id="export">حمّل صفحة الهبوط</button>
-      </div>
-      <div style="margin-top:10px;color:var(--muted);font-size:13px">مثال: اكتب كلمة مفتاحية مثل "تعليم" أو "بنزين" للحصول على أفكار مخصصة.</div>
-    </div>
+      <article class="card" id="fuelCard">
+        <h3>الوقود (بنزين/ديزل)</h3>
+        <div id="fuelValue">---</div>
+        <small id="fuelSource">آخر تحديث: --</small>
+      </article>
 
-    <div class="grid">
-      <div>
-        <div class="card">
-          <div class="section-title">فكرة المشروع — خلاصة سريعة</div>
-          <h2 id="idea" style="margin-top:0">اضغط "انتج فكرة عبقرية"</h2>
-          <div class="section-title">الجمهور المستهدف • نموذج الربح • قيمة فريدة</div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap">
-            <div class="pill" id="audience">—</div>
-            <div class="pill" id="model">—</div>
-            <div class="pill" id="uvp">—</div>
-          </div>
-        </div>
+      <article class="card" id="studyCard">
+        <h3>بداية الدراسة والعطل</h3>
+        <div id="studyValue">لا توجد إشعارات</div>
+        <small>لوحة إدارة الدولة / وزارة التعليم</small>
+      </article>
 
-        <div class="card">
-          <div class="section-title">وصف تفصيلي للفكرة</div>
-          <pre id="desc">—</pre>
-        </div>
+      <article class="card" id="linksCard">
+        <h3>روابط المنظومات</h3>
+        <ul id="linksList" style="padding-left:16px;margin:6px 0"></ul>
+      </article>
 
-        <div class="card">
-          <div class="section-title">خطة عمل 7 أيام (قابلة للتنفيذ فوراً)</div>
-          <pre id="plan">—</pre>
-        </div>
+      <article class="card" id="newsCard">
+        <h3>أخبار موثوقة (ملخص)</h3>
+        <div id="newsList">تحميل الأخبار...</div>
+      </article>
+    </section>
 
-        <div class="card">
-          <div class="section-title">اقتراحات تسويق ونماذج دخل</div>
-          <pre id="growth">—</pre>
-        </div>
-      </div>
+    <section style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <button id="refreshBtn">تحديث الآن</button>
+      <button id="toggleAuto">إيقاف التحديث التلقائي</button>
+      <div style="margin-left:auto;font-size:13px;color:#555">نسخة تجريبية — يمكنك تعديل المحتوى عبر لوحة الأدمن</div>
+    </section>
 
-      <div>
-        <div class="card logo-preview">
-          <div>
-            <div class="section-title">شعار تجريبي (SVG)</div>
-            <div class="logo-box" id="logo">GZ</div>
-          </div>
-          <div style="flex:1">
-            <div class="section-title">اسم المشروع المقترح</div>
-            <div id="name" style="font-size:18px;font-weight:700">—</div>
-            <div class="section-title" style="margin-top:12px">وصف قصير للشعار</div>
-            <div id="logoDesc">—</div>
-          </div>
-        </div>
+    <footer>
+      LibyaLive Hub — صمم لك من قبل ناصر بارود (تجريبي). احفظ الملف باسم <code>index.html</code> وارفعه على GitHub Pages.
+    </footer>
+  </div>
 
-        <div class="card">
-          <div class="section-title">نسخة صفحة الهبوط (HTML)</div>
-          <pre id="landing" style="max-height:280px;overflow:auto">—</pre>
-        </div>
-
-        <div class="card">
-          <div class="section-title">أدوات مقترحة</div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <div class="pill">GitHub Pages — لنشر الصفحة مجاناً</div>
-            <div class="pill">Google Forms أو Typeform — لجمع عملاء محتملين</div>
-            <div class="pill">Stripe / PayPal (أو بوابات محلية) — للدفع</div>
-            <div class="pill">إعلان بسيط على فيسبوك/تيك توك</div>
-          </div>
-        </div>
-
+  <!-- admin modal -->
+  <div class="modal" id="adminModal">
+    <div class="box">
+      <h3>لوحة الأدمن (محلي)</h3>
+      <label>نص الإشعار العلوي</label>
+      <textarea id="adminNotice" rows="2"></textarea>
+      <label style="margin-top:8px">روابط المنظومات (json: [{"name":"","url":""}])</label>
+      <textarea id="adminLinks" rows="4"></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+        <button id="saveAdmin">حفظ</button>
+        <button id="closeAdmin">إغلاق</button>
       </div>
     </div>
-
-    <footer>ملاحظة: هذا مولد محلي - عدّل النصوص والصور قبل النشر. أطلب مني تحويل الفكرة إلى مشروع قابل للرفع على GitHub أو كود React كامل.</footer>
   </div>
 
   <script>
-    // مولّد بسيط لكنه قوي: يبني اسم، وصف، شعار SVG، وصف صفحة هبوط، وخطة 7 أيام
-    const categories = {
-      "المستخدمون العرب": [
-        'تطبيق توصيل خدمات محلية حسب الطلب', 'منصة اشتراك قصص صوتية باللهجات المحلية', 'سوق إلكتروني لمنتجات حرفية محلية'
+    // إعداد مبدئي للواجهة مع بيانات تجريبية وتخزين محلي
+    const lastUpdateEl = document.getElementById('lastUpdate');
+    const topNotice = document.getElementById('topNotice');
+    const dollarValue = document.getElementById('dollarValue');
+    const dollarSource = document.getElementById('dollarSource');
+    const liquidityValue = document.getElementById('liquidityValue');
+    const fuelValue = document.getElementById('fuelValue');
+    const fuelSource = document.getElementById('fuelSource');
+    const studyValue = document.getElementById('studyValue');
+    const linksList = document.getElementById('linksList');
+    const newsList = document.getElementById('newsList');
+
+    // Admin elements
+    const adminModal = document.getElementById('adminModal');
+    const openAdmin = document.getElementById('openAdmin');
+    const closeAdmin = document.getElementById('closeAdmin');
+    const adminNotice = document.getElementById('adminNotice');
+    const adminLinks = document.getElementById('adminLinks');
+    const saveAdmin = document.getElementById('saveAdmin');
+
+    // Controls
+    const refreshBtn = document.getElementById('refreshBtn');
+    const toggleAuto = document.getElementById('toggleAuto');
+
+    // Default config (يمكن تعديلها عبر الأدمن)
+    const DEFAULT_CONFIG = {
+      notice: 'مرحباً! هذه نسخة تجريبية — للتحديثات الحقيقية اربط APIs حقيقية.',
+      links: [
+        {name:'الرقم الوطني',url:'#'},
+        {name:'منظومة الجوازات',url:'#'},
+        {name:'منحة الزوجة والأطفال',url:'#'}
       ],
-      "الشركات الصغيرة": [
-        'أداة فواتير ذكية مصغرة', 'نظام حجز مواعيد مع رسائل تذكير أوتوماتيكية', 'خدمة إدارة حضور ومرتبات مبسطة'
-      ],
-      "السفر والسياحة": [
-        'دليل سياحي تفاعلي لمناطق محددة مع خرائط أوفلاين', 'خدمة حجز تجارب محلية مميزة', 'اشتراك رحلات قصيرة مخصصة للمهتمين'
-      ],
-      "التعليم": [
-        'منصة دورات مصغرة متخصصة لمهارات سوق العمل', 'تطبيق مراجعات قصيرة بالغة البساطة للطلاب', 'خدمة تدريب عبر الإنترنت مع شهادات مصغرة'
-      ],
-      "الزراعة": [
-        'نظام مراقبة محاصيل بسيط لتمكين المزارعين الصغار', 'خدمة شراء مباشر للمحاصيل للمتاجر المحلية', 'اشتراك نصائح يومية ذكية للمزارع الصغير'
-      ],
-      "التجارة الإلكترونية": [
-        'أداة توصيف منتجات تلقائية مع صور SVG سريعة', 'وسيط دفع محلي مبسط للتجار الصغار', 'خدمة إعداد متاجر سريعة لواتساب'
-      ]
+      autoUpdate: true,
+      updateIntervalSec: 60
+    };
+
+    function loadConfig(){
+      try{
+        const raw = localStorage.getItem('ll_config');
+        return raw ? JSON.parse(raw) : DEFAULT_CONFIG;
+      }catch(e){
+        return DEFAULT_CONFIG;
+      }
+    }
+    function saveConfig(cfg){ localStorage.setItem('ll_config',JSON.stringify(cfg)); }
+
+    // محاكاة استدعاءات API — استبدل الروابط داخل هذه الدوال بخدمات حقيقية
+    async function fetchDollar(){
+      // مثال: يمكنك استبدال هذه الدالة ب fetch('https://api.mydollar.example')
+      return {value: (4.5 + Math.random()*0.2).toFixed(3), source:'سعر محلي تقريبي'};
+    }
+    async function fetchLiquidity(){
+      const sources = ['مصرف ليبيا المركزي','بنوك محلية','تجار نقد'];
+      return {value:Math.random()>0.6? 'يوجد سيولة':'قليلة', source:sources[Math.floor(Math.random()*sources.length)]};
+    }
+    async function fetchFuel(){
+      const states = ['متوفر','غير متوفر','نقص جزئي'];
+      return {value:`بنزين: ${states[Math.floor(Math.random()*states.length)]} — ديزل: ${states[Math.floor(Math.random()*states.length)]}`, source:'تقرير عملي'};
+    }
+    async function fetchStudy(){
+      // هنا يمكنك ربط صفحة وزارة التعليم الحقيقية
+      return {value:'لا تغييرات مسجلة', source:'وزارة التعليم'};
+    }
+    async function fetchNews(){
+      // ملخصات قصيرة تجريبية — ربط بصحف موثوقة أو RSS لاحقاً
+      return [
+        {t:'تحديثات محلية مهمة — متابعة',d:'لم يرد جديد'},
+        {t:'سوق الوقود',d:'تحسّن في التوزيع ببعض المناطق'}
+      ];
     }
 
-    const uvpTemplates = [
-      'سرعة إطلاق خلال 48 ساعة مع نسخة جاهزة للرفع',
-      'تكلفة تشغيل منخفضة جداً — لا حاجة لسيرفرات باهظة',
-      'تركّز فقط على حاجة محلية محددة لم تُحل جيداً'
-    ]
+    // تحديث واجهة المستخدم
+    async function updateAll(){
+      try{
+        lastUpdateEl.textContent = 'آخر تحديث: ' + new Date().toLocaleString('ar-EG');
+        const [doll,liq,fuel,study,news] = await Promise.all([fetchDollar(),fetchLiquidity(),fetchFuel(),fetchStudy(),fetchNews()]);
+        dollarValue.textContent = doll.value + ' دينار';
+        dollarSource.textContent = 'المصدر: ' + doll.source;
+        liquidityValue.textContent = liq.value;
+        document.getElementById('liquiditySource').textContent = 'المصدر: ' + liq.source;
+        fuelValue.textContent = fuel.value;
+        fuelSource.textContent = 'المصدر: ' + fuel.source;
+        studyValue.textContent = study.value;
+        // أخبار
+        newsList.innerHTML = news.map(n=>`<div style="margin-bottom:8px"><strong>${n.t}</strong><div><small>${n.d}</small></div></div>`).join('');
 
-    const models = ['اشتراكات', 'دفع مرة', 'عمولة على كل عملية', 'إعلانات + عروض خاصة', 'خدمات استشارية']
+        // تحميل الروابط من الـ config
+        const cfg = loadConfig();
+        topNotice.textContent = cfg.notice || '';
+        linksList.innerHTML = cfg.links.map(l=>`<li><a href="${l.url}" target="_blank">${l.name}</a></li>`).join('');
 
-    function pick(arr){ return arr[Math.floor(Math.random()*arr.length)] }
-
-    function makeName(seed){
-      const parts = ['نمت', 'سريع', 'سِتارت', 'فلو', 'وصّل', 'مهرة', 'سهل', 'مِيزا', 'ربح']
-      if(seed && seed.trim()) return seed.trim() + ' ' + pick(parts)
-      return pick(parts) + pick(parts).slice(0,3)
+      }catch(err){
+        console.error(err);
+        topNotice.textContent = 'خطأ في جلب البيانات — افحص الاتصال أو الأكواد';
+      }
     }
 
-    function makeLogoLetters(name){
-      const words = name.split(' ').filter(Boolean)
-      if(words.length===1) return words[0].slice(0,2).toUpperCase()
-      return (words[0][0]+words[1][0]).toUpperCase()
+    // Auto update loop
+    let autoInterval = null;
+    function startAuto(){
+      const cfg = loadConfig();
+      if(autoInterval) clearInterval(autoInterval);
+      if(cfg.autoUpdate){
+        autoInterval = setInterval(updateAll, Math.max(10, cfg.updateIntervalSec)*1000);
+        toggleAuto.textContent = 'إيقاف التحديث التلقائي';
+      }else{
+        toggleAuto.textContent = 'تشغيل التحديث التلقائي';
+      }
     }
 
-    function generate(){
-      const aud = document.getElementById('aud').value
-      const style = document.getElementById('style').value
-      const seed = document.getElementById('seed').value
+    // عناصر التحكم
+    refreshBtn.addEventListener('click', ()=>{ updateAll(); });
+    toggleAuto.addEventListener('click', ()=>{
+      const cfg = loadConfig(); cfg.autoUpdate = !cfg.autoUpdate; saveConfig(cfg); startAuto();
+    });
 
-      const ideaBase = pick(categories[aud])
-      const name = makeName(seed || ideaBase.split(' ')[0])
-      const logoLetters = makeLogoLetters(name)
-      const uvp = pick(uvpTemplates)
-      const model = pick(models)
+    // admin modal
+    openAdmin.addEventListener('click', ()=>{
+      const cfg = loadConfig(); adminNotice.value = cfg.notice; adminLinks.value = JSON.stringify(cfg.links, null, 2); adminModal.classList.add('active');
+    });
+    closeAdmin.addEventListener('click', ()=> adminModal.classList.remove('active'));
+    saveAdmin.addEventListener('click', ()=>{
+      try{
+        const links = JSON.parse(adminLinks.value);
+        const cfg = loadConfig(); cfg.notice = adminNotice.value; cfg.links = links; saveConfig(cfg);
+        adminModal.classList.remove('active'); updateAll();
+        alert('تم الحفظ محلياً');
+      }catch(e){ alert('خطأ في صيغة الروابط. تأكد من JSON صحيح.'); }
+    });
 
-      const idea = `${ideaBase} مخصّص لـ${aud}، نموذج الربح المقترح: ${style} / ${model}.`
-      const desc = `ما هو: ${ideaBase}.
-لماذا: لأنّ هناك حاجة واضحة في السوق المحلي لتبسيط التعامل مع هذه الخدمة.
-كيف: صفحة هبوط بسيطة + نموذج عملاء + نسخة تجريبية مجانية 14 يوم.
-تقنية مقترحة: صفحة HTML + سيرفر بسيط أو GitHub Pages للواجهة وAPI صغير (إمكانية استخدام Google Sheets كباك-إند أولي).`
+    // init
+    (function init(){
+      // ضع تهيئة أولية
+      if(!localStorage.getItem('ll_config')) saveConfig(DEFAULT_CONFIG);
+      updateAll();
+      startAuto();
+      // لتجربة تلقائية: حدث كل دقيقة
+    })();
 
-      const plan = `اليوم 1: صفحة هبوط MVP (استخدم زر "حمّل صفحة الهبوط").\nاليوم 2: إعداد نموذج جمع بيانات العملاء (Google Forms) وربط الزر.\nاليوم 3: إطلاق حملة إعلانية صغيرة تجريبية (مِبلغ رمزي).\nاليوم 4: استلام أول 10 مهتمين وتجهيز تجربة مجانية.\nاليوم 5: جمع ملاحظات وتحسين واجهة الدفع.\nاليوم 6: إضافة لوحة إدارة بسيطة لتتبع المستخدمين.\nاليوم 7: قياس نتائج الحملة وتوسيع القناة الأفضل.`
-
-      const growth = `قنوات تسويق مقترحة:
-- إعلانات مموّلة مُركّزة على فيسبوك/تيك توك.
-- التعاون مع مؤثرين محليين بصيغ مقايضة (تجربة مجانية مقابل مراجعة).
-- عروض إطلاق: خصم لأول 100 مشترك.
-نماذج دخل: ${model} + خدمات متميزة.`
-
-      const landingHtml = makeLandingHtml({name,ideaBase,descShort:idea,logoLetters})
-
-      // update UI
-      document.getElementById('idea').textContent = ideaBase
-      document.getElementById('audience').textContent = aud
-      document.getElementById('model').textContent = style + ' • ' + model
-      document.getElementById('uvp').textContent = uvp
-
-      document.getElementById('desc').textContent = desc
-      document.getElementById('plan').textContent = plan
-      document.getElementById('growth').textContent = growth
-
-      document.getElementById('logo').textContent = logoLetters
-      document.getElementById('name').textContent = name
-      document.getElementById('logoDesc').textContent = `شعار مبسّط يتكوّن من الحروف: ${logoLetters}`
-
-      document.getElementById('landing').textContent = landingHtml
-
-      // save current landing to export
-      window.__currentLanding = {name,html:landingHtml}
-    }
-
-    function makeLandingHtml({name,ideaBase,descShort,logoLetters}){
-      const safeName = name.replace(/[^\w\-\sء-ي]/g,'').trim()
-      const html = `<!doctype html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>${safeName}</title>\n<style>body{font-family:Arial,Helvetica,sans-serif;direction:rtl;padding:24px;background:#f7fafc;color:#021;} .hero{max-width:900px;margin:36px auto;background:#fff;padding:28px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06)} h1{margin:0 0 6px} .cta{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:8px;background:#06b6d4;color:#fff;text-decoration:none} .features{margin-top:18px} .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#06b6d4,#0ea5a4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}</style>\n</head>\n<body>\n<div class=\"hero\">\n  <div style=\"display:flex;gap:12px;align-items:center\">\n    <div class=\"logo\">${logoLetters}</div>\n    <div>\n      <h1>${safeName}</h1>\n      <div style=\"color:#556\">${ideaBase} — حل عملي وفعّال</div>\n    </div>\n  </div>\n  <p style=\"margin-top:14px\">${descShort} \n  </p>\n  <a class=\"cta\" href=\"#contact\">احجز نسختك التجريبية</a>\n  <div class=\"features\">\n    <h3>مميزات سريعة</h3>\n    <ul>\n      <li>إطلاق سريع خلال 48 ساعة</li>\n      <li>تكلفة تشغيل منخفضة</li>\n      <li>دعم عربي مباشر</li>\n    </ul>\n  </div>\n  <div id=\"contact\" style=\"margin-top:18px\">\n    <form onsubmit=\"event.preventDefault();alert('شكراً! سنتواصل معك.');\">\n      <input placeholder=\"اسمك\" required style=\"padding:10px;border-radius:8px;border:1px solid #ddd;width:100%;box-sizing:border-box\"><br><br>\n      <input placeholder=\"جوال أو إيميل\" required style=\"padding:10px;border-radius:8px;border:1px solid #ddd;width:100%;box-sizing:border-box\"><br><br>\n      <button style=\"padding:10px 14px;border-radius:8px;background:#06b6d4;color:#fff;border:0\">ارسل</button>\n    </form>\n  </div>\n</div>\n</body>\n</html>`
-      return html
-    }
-
-    // download current landing as file
-    function downloadLanding(){
-      const cur = window.__currentLanding
-      if(!cur){ alert('اولاً: اضغط "انتج فكرة عبقرية" لإنشاء صفحة.'); return }
-      const blob = new Blob([cur.html], {type:'text/html;charset=utf-8'})
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = (cur.name || 'landing') + '.html'
-      document.body.appendChild(a)
-      a.click()
-      a.remove()
-      URL.revokeObjectURL(url)
-    }
-
-    document.getElementById('gen').addEventListener('click', generate)
-    document.getElementById('regen').addEventListener('click', generate)
-    document.getElementById('export').addEventListener('click', downloadLanding)
-
-    // initial seed
-    window.addEventListener('load', ()=>{
-      // generate once so UI not empty
-      generate()
-    })
+    // ملاحظات للمطور: لربط APIs حقيقية استبدل دوال fetch* بـ fetch(URL) وتعامل مع JSON
   </script>
 </body>
 </html>
