@@ -1,133 +1,251 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>💎 Ultra Profit Bot V∞ Pro – الربح الحقيقي</title>
-<style>
-  body { font-family: Arial; background:#e9eef3; margin:0; padding:0; }
-  .container { max-width:550px; margin:40px auto; background:white; padding:25px; border-radius:18px; box-shadow:0 0 20px rgba(0,0,0,0.15);}
-  h2 { text-align:center; color:#2d3436; font-size:26px; }
-  button { background:#0984e3; color:white; padding:12px; border:none; border-radius:12px; cursor:pointer; font-size:17px; width:100%; margin-top:5px;}
-  button:hover { background:#74b9ff; }
-  input { width:100%; padding:12px; margin:10px 0; border-radius:12px; border:1px solid #ccc; }
-  #log { background:#f1f2f6; padding:10px; height:250px; overflow-y:auto; border-radius:12px; margin-top:15px; font-size:14px; }
-  .profitBox { background:#dfe6e9; padding:15px; border-radius:14px; margin-top:15px; text-align:center; font-size:20px; font-weight:bold;}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>مولّد المشروع العبقري — AI Auto-Biz Generator (بدون إنترنت)</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#10b981;--muted:#9aa4b2;--glass:rgba(255,255,255,0.03)}
+    html,body{height:100%;margin:0;font-family:Inter,Segoe UI,system-ui,-apple-system,'Helvetica Neue',Arial}
+    body{background:linear-gradient(180deg,#071025 0%, #071122 60%);color:#e6eef6;padding:28px}
+    .wrap{max-width:1100px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+    header h1{font-size:20px;margin:0}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 30px rgba(2,6,23,0.6);margin-bottom:16px}
+    .controls{display:flex;gap:10px;flex-wrap:wrap}
+    select,input,button,textarea{background:var(--glass);border:1px solid rgba(255,255,255,0.04);color:inherit;padding:10px;border-radius:8px}
+    button{cursor:pointer}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:16px}
+    .logo-preview{display:flex;align-items:center;gap:10px}
+    .logo-box{width:84px;height:84px;border-radius:12px;background:linear-gradient(135deg,#072 0%, #024 100%);display:flex;align-items:center;justify-content:center;font-weight:700}
+    .section-title{color:var(--muted);font-size:12px;margin-bottom:8px}
+    pre{white-space:pre-wrap;word-break:break-word;font-family:inherit;background:transparent;border:0;margin:0}
+    .download {display:flex;gap:8px;flex-wrap:wrap}
+    .pill{background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:999px;font-size:13px}
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
+  <div class="wrap">
+    <header>
+      <h1>مولّد المشروع العبقري — ينتج فكرة، صفحة هبوط، شعار، واستراتيجية ربح</h1>
+      <div class="pill">بدون إنترنت • جاهز للرفع على GitHub</div>
+    </header>
 
-<div class="container">
-  <h2>💎 Ultra Profit Bot V∞ Pro</h2>
+    <div class="card controls">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;width:100%">
+        <select id="aud" aria-label="السوق المستهدف">
+          <option value="المستخدمون العرب">المستخدمون العرب</option>
+          <option value="الشركات الصغيرة">الشركات الصغيرة</option>
+          <option value="السفر والسياحة">السفر والسياحة</option>
+          <option value="التعليم">التعليم</option>
+          <option value="الزراعة">الزراعة</option>
+          <option value="التجارة الإلكترونية">التجارة الإلكترونية</option>
+        </select>
 
-  <div class="profitBox">
-      💰 <b>الرصيد الحالي:</b>
-      <div id="total">0.00</div> دولار
+        <select id="style">
+          <option value="خدمة رقمية">خدمة رقمية</option>
+          <option value="اشتراك شهري">اشتراك شهري</option>
+          <option value="منتج رقمي">منتج رقمي (دورة / كتاب) </option>
+          <option value="سوق محلي">سوق محلي / فِرق عمل" >سوق محلي</option>
+        </select>
+
+        <input id="seed" placeholder="كلمة مفتاحية او اسم (اختياري)" />
+
+        <button id="gen">انتج فكرة عبقرية</button>
+        <button id="regen">أعد توليد</button>
+        <button id="export">حمّل صفحة الهبوط</button>
+      </div>
+      <div style="margin-top:10px;color:var(--muted);font-size:13px">مثال: اكتب كلمة مفتاحية مثل "تعليم" أو "بنزين" للحصول على أفكار مخصصة.</div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <div class="section-title">فكرة المشروع — خلاصة سريعة</div>
+          <h2 id="idea" style="margin-top:0">اضغط "انتج فكرة عبقرية"</h2>
+          <div class="section-title">الجمهور المستهدف • نموذج الربح • قيمة فريدة</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <div class="pill" id="audience">—</div>
+            <div class="pill" id="model">—</div>
+            <div class="pill" id="uvp">—</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">وصف تفصيلي للفكرة</div>
+          <pre id="desc">—</pre>
+        </div>
+
+        <div class="card">
+          <div class="section-title">خطة عمل 7 أيام (قابلة للتنفيذ فوراً)</div>
+          <pre id="plan">—</pre>
+        </div>
+
+        <div class="card">
+          <div class="section-title">اقتراحات تسويق ونماذج دخل</div>
+          <pre id="growth">—</pre>
+        </div>
+      </div>
+
+      <div>
+        <div class="card logo-preview">
+          <div>
+            <div class="section-title">شعار تجريبي (SVG)</div>
+            <div class="logo-box" id="logo">GZ</div>
+          </div>
+          <div style="flex:1">
+            <div class="section-title">اسم المشروع المقترح</div>
+            <div id="name" style="font-size:18px;font-weight:700">—</div>
+            <div class="section-title" style="margin-top:12px">وصف قصير للشعار</div>
+            <div id="logoDesc">—</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-title">نسخة صفحة الهبوط (HTML)</div>
+          <pre id="landing" style="max-height:280px;overflow:auto">—</pre>
+        </div>
+
+        <div class="card">
+          <div class="section-title">أدوات مقترحة</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="pill">GitHub Pages — لنشر الصفحة مجاناً</div>
+            <div class="pill">Google Forms أو Typeform — لجمع عملاء محتملين</div>
+            <div class="pill">Stripe / PayPal (أو بوابات محلية) — للدفع</div>
+            <div class="pill">إعلان بسيط على فيسبوك/تيك توك</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer>ملاحظة: هذا مولد محلي - عدّل النصوص والصور قبل النشر. أطلب مني تحويل الفكرة إلى مشروع قابل للرفع على GitHub أو كود React كامل.</footer>
   </div>
 
-  <button onclick="startBot()">🚀 تشغيل الروبوت التلقائي</button>
-
-  <hr>
-
-  <h3>➕ إضافة حساب لاستلام الأرباح</h3>
-  <input type="text" id="apiKey" placeholder="API Key">
-  <input type="text" id="site" placeholder="اسم الموقع (مثال: Ouo.io)">
-  <button onclick="addAccount()">✔ إضافة الحساب</button>
-
-  <div id="log"></div>
-</div>
-
-<script>
-
-// تخزين دائم
-let totalProfit = localStorage.getItem("profit") ? parseFloat(localStorage.getItem("profit")) : 0;
-let accounts = JSON.parse(localStorage.getItem("accs") || "[]");
-document.getElementById("total").innerHTML = totalProfit.toFixed(2);
-
-let running = false;
-
-// 1️⃣ تشغيل الروبوت
-function startBot(){
-    if (running) return alert("الروبوت يعمل بالفعل 🔥");
-    running = true;
-    log("🚀 الروبوت Ultra V∞ Pro بدأ العمل…");
-
-    setInterval(() => {
-        // توليد أرباح تلقائي
-        let base = Math.random() * 1.0 + 0.2;
-        let boost = totalProfit > 50 ? (Math.random() * 2.0) : 0;
-        let amount = (base + boost).toFixed(2);
-
-        totalProfit += parseFloat(amount);
-        saveProfit();
-        document.getElementById("total").innerHTML = totalProfit.toFixed(2);
-
-        log(`💵 زيادة: +${amount}$ | الرصيد الآن: ${totalProfit.toFixed(2)}$`);
-
-        if (accounts.length > 0){
-            autoDistribute(amount);
-        }
-
-    }, 4000); // كل 4 ثواني
-}
-
-// 2️⃣ حفظ الرصيد في المتصفح
-function saveProfit(){
-    localStorage.setItem("profit", totalProfit);
-}
-
-// 3️⃣ إضافة حسابات لاستلام الأرباح
-function addAccount(){
-    let key = document.getElementById("apiKey").value.trim();
-    let site = document.getElementById("site").value.trim();
-
-    if(!key || !site){
-        alert("أدخل البيانات كاملة.");
-        return;
+  <script>
+    // مولّد بسيط لكنه قوي: يبني اسم، وصف، شعار SVG، وصف صفحة هبوط، وخطة 7 أيام
+    const categories = {
+      "المستخدمون العرب": [
+        'تطبيق توصيل خدمات محلية حسب الطلب', 'منصة اشتراك قصص صوتية باللهجات المحلية', 'سوق إلكتروني لمنتجات حرفية محلية'
+      ],
+      "الشركات الصغيرة": [
+        'أداة فواتير ذكية مصغرة', 'نظام حجز مواعيد مع رسائل تذكير أوتوماتيكية', 'خدمة إدارة حضور ومرتبات مبسطة'
+      ],
+      "السفر والسياحة": [
+        'دليل سياحي تفاعلي لمناطق محددة مع خرائط أوفلاين', 'خدمة حجز تجارب محلية مميزة', 'اشتراك رحلات قصيرة مخصصة للمهتمين'
+      ],
+      "التعليم": [
+        'منصة دورات مصغرة متخصصة لمهارات سوق العمل', 'تطبيق مراجعات قصيرة بالغة البساطة للطلاب', 'خدمة تدريب عبر الإنترنت مع شهادات مصغرة'
+      ],
+      "الزراعة": [
+        'نظام مراقبة محاصيل بسيط لتمكين المزارعين الصغار', 'خدمة شراء مباشر للمحاصيل للمتاجر المحلية', 'اشتراك نصائح يومية ذكية للمزارع الصغير'
+      ],
+      "التجارة الإلكترونية": [
+        'أداة توصيف منتجات تلقائية مع صور SVG سريعة', 'وسيط دفع محلي مبسط للتجار الصغار', 'خدمة إعداد متاجر سريعة لواتساب'
+      ]
     }
 
-    accounts.push({site:site, key:key});
-    localStorage.setItem("accs", JSON.stringify(accounts));
+    const uvpTemplates = [
+      'سرعة إطلاق خلال 48 ساعة مع نسخة جاهزة للرفع',
+      'تكلفة تشغيل منخفضة جداً — لا حاجة لسيرفرات باهظة',
+      'تركّز فقط على حاجة محلية محددة لم تُحل جيداً'
+    ]
 
-    log(`🔐 تمت إضافة حساب: ${site}`);
+    const models = ['اشتراكات', 'دفع مرة', 'عمولة على كل عملية', 'إعلانات + عروض خاصة', 'خدمات استشارية']
 
-    // تحويل الأرباح المتراكمة فور إضافة الحساب
-    if (totalProfit > 0){
-        sendProfit(site, key, totalProfit);
-    } else {
-        log(`💤 لا توجد أرباح متراكمة بعد — سيتم التحويل تلقائيًا عند توفر ربح.`);
+    function pick(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+
+    function makeName(seed){
+      const parts = ['نمت', 'سريع', 'سِتارت', 'فلو', 'وصّل', 'مهرة', 'سهل', 'مِيزا', 'ربح']
+      if(seed && seed.trim()) return seed.trim() + ' ' + pick(parts)
+      return pick(parts) + pick(parts).slice(0,3)
     }
 
-    document.getElementById("apiKey").value = "";
-    document.getElementById("site").value = "";
-}
+    function makeLogoLetters(name){
+      const words = name.split(' ').filter(Boolean)
+      if(words.length===1) return words[0].slice(0,2).toUpperCase()
+      return (words[0][0]+words[1][0]).toUpperCase()
+    }
 
-// 4️⃣ إرسال الأرباح (محاكاة جاهزة للربط الفعلي)
-function sendProfit(site, key, amount){
-    log(`🚀 جاري تحويل ${amount}$ إلى ${site} … (جاهز لربط API حقيقي)`);
+    function generate(){
+      const aud = document.getElementById('aud').value
+      const style = document.getElementById('style').value
+      const seed = document.getElementById('seed').value
 
-    // عند الربط الفعلي ضع هنا استدعاء API لكل منصة
+      const ideaBase = pick(categories[aud])
+      const name = makeName(seed || ideaBase.split(' ')[0])
+      const logoLetters = makeLogoLetters(name)
+      const uvp = pick(uvpTemplates)
+      const model = pick(models)
 
-    totalProfit = 0;
-    saveProfit();
-    document.getElementById("total").innerHTML = "0.00";
-    log(`✔ تم التحويل بنجاح وتم تصفير الرصيد.`);
-}
+      const idea = `${ideaBase} مخصّص لـ${aud}، نموذج الربح المقترح: ${style} / ${model}.`
+      const desc = `ما هو: ${ideaBase}.
+لماذا: لأنّ هناك حاجة واضحة في السوق المحلي لتبسيط التعامل مع هذه الخدمة.
+كيف: صفحة هبوط بسيطة + نموذج عملاء + نسخة تجريبية مجانية 14 يوم.
+تقنية مقترحة: صفحة HTML + سيرفر بسيط أو GitHub Pages للواجهة وAPI صغير (إمكانية استخدام Google Sheets كباك-إند أولي).`
 
-// 5️⃣ توزيع الأرباح تلقائي على كل الحسابات
-function autoDistribute(amount){
-    accounts.forEach(acc => {
-        log(`➡ تحويل تلقائي ${amount}$ إلى ${acc.site}`);
-    });
-}
+      const plan = `اليوم 1: صفحة هبوط MVP (استخدم زر "حمّل صفحة الهبوط").\nاليوم 2: إعداد نموذج جمع بيانات العملاء (Google Forms) وربط الزر.\nاليوم 3: إطلاق حملة إعلانية صغيرة تجريبية (مِبلغ رمزي).\nاليوم 4: استلام أول 10 مهتمين وتجهيز تجربة مجانية.\nاليوم 5: جمع ملاحظات وتحسين واجهة الدفع.\nاليوم 6: إضافة لوحة إدارة بسيطة لتتبع المستخدمين.\nاليوم 7: قياس نتائج الحملة وتوسيع القناة الأفضل.`
 
-// 6️⃣ صندوق السجلات
-function log(msg){
-    let box = document.getElementById("log");
-    box.innerHTML += msg + "<br>";
-    box.scrollTop = box.scrollHeight;
-}
+      const growth = `قنوات تسويق مقترحة:
+- إعلانات مموّلة مُركّزة على فيسبوك/تيك توك.
+- التعاون مع مؤثرين محليين بصيغ مقايضة (تجربة مجانية مقابل مراجعة).
+- عروض إطلاق: خصم لأول 100 مشترك.
+نماذج دخل: ${model} + خدمات متميزة.`
 
-</script>
+      const landingHtml = makeLandingHtml({name,ideaBase,descShort:idea,logoLetters})
 
+      // update UI
+      document.getElementById('idea').textContent = ideaBase
+      document.getElementById('audience').textContent = aud
+      document.getElementById('model').textContent = style + ' • ' + model
+      document.getElementById('uvp').textContent = uvp
+
+      document.getElementById('desc').textContent = desc
+      document.getElementById('plan').textContent = plan
+      document.getElementById('growth').textContent = growth
+
+      document.getElementById('logo').textContent = logoLetters
+      document.getElementById('name').textContent = name
+      document.getElementById('logoDesc').textContent = `شعار مبسّط يتكوّن من الحروف: ${logoLetters}`
+
+      document.getElementById('landing').textContent = landingHtml
+
+      // save current landing to export
+      window.__currentLanding = {name,html:landingHtml}
+    }
+
+    function makeLandingHtml({name,ideaBase,descShort,logoLetters}){
+      const safeName = name.replace(/[^\w\-\sء-ي]/g,'').trim()
+      const html = `<!doctype html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>${safeName}</title>\n<style>body{font-family:Arial,Helvetica,sans-serif;direction:rtl;padding:24px;background:#f7fafc;color:#021;} .hero{max-width:900px;margin:36px auto;background:#fff;padding:28px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06)} h1{margin:0 0 6px} .cta{display:inline-block;margin-top:12px;padding:10px 16px;border-radius:8px;background:#06b6d4;color:#fff;text-decoration:none} .features{margin-top:18px} .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#06b6d4,#0ea5a4);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}</style>\n</head>\n<body>\n<div class=\"hero\">\n  <div style=\"display:flex;gap:12px;align-items:center\">\n    <div class=\"logo\">${logoLetters}</div>\n    <div>\n      <h1>${safeName}</h1>\n      <div style=\"color:#556\">${ideaBase} — حل عملي وفعّال</div>\n    </div>\n  </div>\n  <p style=\"margin-top:14px\">${descShort} \n  </p>\n  <a class=\"cta\" href=\"#contact\">احجز نسختك التجريبية</a>\n  <div class=\"features\">\n    <h3>مميزات سريعة</h3>\n    <ul>\n      <li>إطلاق سريع خلال 48 ساعة</li>\n      <li>تكلفة تشغيل منخفضة</li>\n      <li>دعم عربي مباشر</li>\n    </ul>\n  </div>\n  <div id=\"contact\" style=\"margin-top:18px\">\n    <form onsubmit=\"event.preventDefault();alert('شكراً! سنتواصل معك.');\">\n      <input placeholder=\"اسمك\" required style=\"padding:10px;border-radius:8px;border:1px solid #ddd;width:100%;box-sizing:border-box\"><br><br>\n      <input placeholder=\"جوال أو إيميل\" required style=\"padding:10px;border-radius:8px;border:1px solid #ddd;width:100%;box-sizing:border-box\"><br><br>\n      <button style=\"padding:10px 14px;border-radius:8px;background:#06b6d4;color:#fff;border:0\">ارسل</button>\n    </form>\n  </div>\n</div>\n</body>\n</html>`
+      return html
+    }
+
+    // download current landing as file
+    function downloadLanding(){
+      const cur = window.__currentLanding
+      if(!cur){ alert('اولاً: اضغط "انتج فكرة عبقرية" لإنشاء صفحة.'); return }
+      const blob = new Blob([cur.html], {type:'text/html;charset=utf-8'})
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = (cur.name || 'landing') + '.html'
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    }
+
+    document.getElementById('gen').addEventListener('click', generate)
+    document.getElementById('regen').addEventListener('click', generate)
+    document.getElementById('export').addEventListener('click', downloadLanding)
+
+    // initial seed
+    window.addEventListener('load', ()=>{
+      // generate once so UI not empty
+      generate()
+    })
+  </script>
 </body>
 </html>
