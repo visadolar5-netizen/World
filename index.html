@@ -1,259 +1,121 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LibyaLive Hub — كل شيء لليبيين</title>
-  <style>
-    /* بسيط وجميل — Tailwind-like utilities غير مستخدمة لتسهيل الـ single file */
-    :root{--accent:#0b5cff;--bg:#f6f8fb}
-    html,body{height:100%;margin:0;font-family:Tahoma,Arial, sans-serif;background:var(--bg);color:#111}
-    .container{max-width:1100px;margin:22px auto;padding:18px;background:#fff;border-radius:12px;box-shadow:0 6px 20px rgba(10,20,40,0.06)}
-    header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .brand{display:flex;gap:10px;align-items:center}
-    .logo{width:52px;height:52px;background:linear-gradient(135deg,var(--accent),#00bfa6);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
-    h1{font-size:20px;margin:0}
-    .controls{display:flex;gap:10px;align-items:center}
-    button{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
-    .card{background:#fff;border:1px solid #eef2ff;padding:14px;border-radius:10px;min-height:90px}
-    .card h3{margin:0 0 6px 0;font-size:14px}
-    small{color:#666}
-    footer{margin-top:18px;text-align:center;color:#777;font-size:13px}
-    /* responsive */
-    @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:600px){.grid{grid-template-columns:1fr}.brand h1{font-size:16px}}
-    /* Admin modal */
-    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.35)}
-    .modal.active{display:flex}
-    .modal .box{background:#fff;padding:18px;border-radius:12px;min-width:320px;max-width:640px}
-    .row{display:flex;gap:8px;align-items:center}
-    input[type=text],select,textarea{width:100%;padding:8px;border-radius:8px;border:1px solid #ddd}
-    .top-notice{background:#fff7e6;border:1px solid #ffe2b3;padding:10px;border-radius:8px;margin-top:12px}
-    .badge{background:#eef6ff;color:#0b5cff;padding:6px 8px;border-radius:8px;font-weight:600}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LibyaLive Hub — API متكاملة</title>
+<style>
+:root{--accent:#0b5cff;--bg:#f6f8fb}
+html,body{height:100%;margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--bg);color:#111}
+.container{max-width:1100px;margin:22px auto;padding:18px;background:#fff;border-radius:12px;box-shadow:0 6px 20px rgba(10,20,40,0.06)}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;gap:10px;align-items:center}
+.logo{width:52px;height:52px;background:linear-gradient(135deg,var(--accent),#00bfa6);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+h1{font-size:20px;margin:0}
+.controls{display:flex;gap:10px;align-items:center}
+button{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
+.card{background:#fff;border:1px solid #eef2ff;padding:14px;border-radius:10px;min-height:90px}
+.card h3{margin:0 0 6px 0;font-size:14px}
+small{color:#666}
+footer{margin-top:18px;text-align:center;color:#777;font-size:13px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.brand h1{font-size:16px}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="brand">
-        <div class="logo">LL</div>
-        <div>
-          <h1>LibyaLive Hub</h1>
-          <small>كل ما يحتاجه الليبي — محدث تلقائياً</small>
-        </div>
-      </div>
-      <div class="controls">
-        <div class="badge" id="lastUpdate">آخر تحديث: ---</div>
-        <button id="openAdmin">لوحة الأدمن</button>
-      </div>
-    </header>
-
-    <div class="top-notice" id="topNotice">تحميل البيانات... انتظر ثانيتين.</div>
-
-    <section class="grid" aria-label="محتويات">
-      <article class="card" id="dollarCard">
-        <h3>سعر الدولار</h3>
-        <div id="dollarValue" style="font-size:18px;font-weight:700">--- دينار</div>
-        <small id="dollarSource">المصدر: محلي</small>
-      </article>
-
-      <article class="card" id="liquidityCard">
-        <h3>السيولة اليوم</h3>
-        <div id="liquidityValue">---</div>
-        <small id="liquiditySource">المصدر: محرك السيولة</small>
-      </article>
-
-      <article class="card" id="fuelCard">
-        <h3>الوقود (بنزين/ديزل)</h3>
-        <div id="fuelValue">---</div>
-        <small id="fuelSource">آخر تحديث: --</small>
-      </article>
-
-      <article class="card" id="studyCard">
-        <h3>بداية الدراسة والعطل</h3>
-        <div id="studyValue">لا توجد إشعارات</div>
-        <small>لوحة إدارة الدولة / وزارة التعليم</small>
-      </article>
-
-      <article class="card" id="linksCard">
-        <h3>روابط المنظومات</h3>
-        <ul id="linksList" style="padding-left:16px;margin:6px 0"></ul>
-      </article>
-
-      <article class="card" id="newsCard">
-        <h3>أخبار موثوقة (ملخص)</h3>
-        <div id="newsList">تحميل الأخبار...</div>
-      </article>
-    </section>
-
-    <section style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-      <button id="refreshBtn">تحديث الآن</button>
-      <button id="toggleAuto">إيقاف التحديث التلقائي</button>
-      <div style="margin-left:auto;font-size:13px;color:#555">نسخة تجريبية — يمكنك تعديل المحتوى عبر لوحة الأدمن</div>
-    </section>
-
-    <footer>
-      LibyaLive Hub — صمم لك من قبل ناصر بارود (تجريبي). احفظ الملف باسم <code>index.html</code> وارفعه على GitHub Pages.
-    </footer>
-  </div>
-
-  <!-- admin modal -->
-  <div class="modal" id="adminModal">
-    <div class="box">
-      <h3>لوحة الأدمن (محلي)</h3>
-      <label>نص الإشعار العلوي</label>
-      <textarea id="adminNotice" rows="2"></textarea>
-      <label style="margin-top:8px">روابط المنظومات (json: [{"name":"","url":""}])</label>
-      <textarea id="adminLinks" rows="4"></textarea>
-      <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
-        <button id="saveAdmin">حفظ</button>
-        <button id="closeAdmin">إغلاق</button>
+<div class="container">
+  <header>
+    <div class="brand">
+      <div class="logo">LL</div>
+      <div>
+        <h1>LibyaLive Hub</h1>
+        <small>سعر الصرف مباشر + API</small>
       </div>
     </div>
+    <div class="controls">
+      <div class="badge" id="lastUpdate">آخر تحديث: ---</div>
+      <button id="refreshBtn">تحديث الآن</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <h3>سعر الدولار — السوق الموازي (Fulus.ly)</h3>
+      <div id="fulusValue" style="font-size:18px;font-weight:700">--- دينار</div>
+      <small id="fulusSource">المصدر: ---</small>
+    </div>
+    <div class="card">
+      <h3>سعر الدولار الرسمي (USD → LYD)</h3>
+      <div id="hostValue" style="font-size:18px;font-weight:700">--- دينار</div>
+      <small id="hostSource">المصدر: ---</small>
+    </div>
   </div>
+  <footer>نسخة API — LibyaLive Hub</footer>
+</div>
 
-  <script>
-    // إعداد مبدئي للواجهة مع بيانات تجريبية وتخزين محلي
-    const lastUpdateEl = document.getElementById('lastUpdate');
-    const topNotice = document.getElementById('topNotice');
-    const dollarValue = document.getElementById('dollarValue');
-    const dollarSource = document.getElementById('dollarSource');
-    const liquidityValue = document.getElementById('liquidityValue');
-    const fuelValue = document.getElementById('fuelValue');
-    const fuelSource = document.getElementById('fuelSource');
-    const studyValue = document.getElementById('studyValue');
-    const linksList = document.getElementById('linksList');
-    const newsList = document.getElementById('newsList');
+<script>
+/* ---------------------------
+   1️⃣ Fulus.ly — السوق الموازي LYD
+   ضع مفتاحك الخاص هنا
+---------------------------- */
+const FULUS_API_URL = 'https://fulus.ly/api/v1/rates/current';
+const FULUS_API_KEY = 'YOUR_FULUS_API_KEY'; // ضع مفتاحك هنا
 
-    // Admin elements
-    const adminModal = document.getElementById('adminModal');
-    const openAdmin = document.getElementById('openAdmin');
-    const closeAdmin = document.getElementById('closeAdmin');
-    const adminNotice = document.getElementById('adminNotice');
-    const adminLinks = document.getElementById('adminLinks');
-    const saveAdmin = document.getElementById('saveAdmin');
-
-    // Controls
-    const refreshBtn = document.getElementById('refreshBtn');
-    const toggleAuto = document.getElementById('toggleAuto');
-
-    // Default config (يمكن تعديلها عبر الأدمن)
-    const DEFAULT_CONFIG = {
-      notice: 'مرحباً! هذه نسخة تجريبية — للتحديثات الحقيقية اربط APIs حقيقية.',
-      links: [
-        {name:'الرقم الوطني',url:'#'},
-        {name:'منظومة الجوازات',url:'#'},
-        {name:'منحة الزوجة والأطفال',url:'#'}
-      ],
-      autoUpdate: true,
-      updateIntervalSec: 60
-    };
-
-    function loadConfig(){
-      try{
-        const raw = localStorage.getItem('ll_config');
-        return raw ? JSON.parse(raw) : DEFAULT_CONFIG;
-      }catch(e){
-        return DEFAULT_CONFIG;
-      }
-    }
-    function saveConfig(cfg){ localStorage.setItem('ll_config',JSON.stringify(cfg)); }
-
-    // محاكاة استدعاءات API — استبدل الروابط داخل هذه الدوال بخدمات حقيقية
-    async function fetchDollar(){
-      // مثال: يمكنك استبدال هذه الدالة ب fetch('https://api.mydollar.example')
-      return {value: (4.5 + Math.random()*0.2).toFixed(3), source:'سعر محلي تقريبي'};
-    }
-    async function fetchLiquidity(){
-      const sources = ['مصرف ليبيا المركزي','بنوك محلية','تجار نقد'];
-      return {value:Math.random()>0.6? 'يوجد سيولة':'قليلة', source:sources[Math.floor(Math.random()*sources.length)]};
-    }
-    async function fetchFuel(){
-      const states = ['متوفر','غير متوفر','نقص جزئي'];
-      return {value:`بنزين: ${states[Math.floor(Math.random()*states.length)]} — ديزل: ${states[Math.floor(Math.random()*states.length)]}`, source:'تقرير عملي'};
-    }
-    async function fetchStudy(){
-      // هنا يمكنك ربط صفحة وزارة التعليم الحقيقية
-      return {value:'لا تغييرات مسجلة', source:'وزارة التعليم'};
-    }
-    async function fetchNews(){
-      // ملخصات قصيرة تجريبية — ربط بصحف موثوقة أو RSS لاحقاً
-      return [
-        {t:'تحديثات محلية مهمة — متابعة',d:'لم يرد جديد'},
-        {t:'سوق الوقود',d:'تحسّن في التوزيع ببعض المناطق'}
-      ];
-    }
-
-    // تحديث واجهة المستخدم
-    async function updateAll(){
-      try{
-        lastUpdateEl.textContent = 'آخر تحديث: ' + new Date().toLocaleString('ar-EG');
-        const [doll,liq,fuel,study,news] = await Promise.all([fetchDollar(),fetchLiquidity(),fetchFuel(),fetchStudy(),fetchNews()]);
-        dollarValue.textContent = doll.value + ' دينار';
-        dollarSource.textContent = 'المصدر: ' + doll.source;
-        liquidityValue.textContent = liq.value;
-        document.getElementById('liquiditySource').textContent = 'المصدر: ' + liq.source;
-        fuelValue.textContent = fuel.value;
-        fuelSource.textContent = 'المصدر: ' + fuel.source;
-        studyValue.textContent = study.value;
-        // أخبار
-        newsList.innerHTML = news.map(n=>`<div style="margin-bottom:8px"><strong>${n.t}</strong><div><small>${n.d}</small></div></div>`).join('');
-
-        // تحميل الروابط من الـ config
-        const cfg = loadConfig();
-        topNotice.textContent = cfg.notice || '';
-        linksList.innerHTML = cfg.links.map(l=>`<li><a href="${l.url}" target="_blank">${l.name}</a></li>`).join('');
-
-      }catch(err){
-        console.error(err);
-        topNotice.textContent = 'خطأ في جلب البيانات — افحص الاتصال أو الأكواد';
-      }
-    }
-
-    // Auto update loop
-    let autoInterval = null;
-    function startAuto(){
-      const cfg = loadConfig();
-      if(autoInterval) clearInterval(autoInterval);
-      if(cfg.autoUpdate){
-        autoInterval = setInterval(updateAll, Math.max(10, cfg.updateIntervalSec)*1000);
-        toggleAuto.textContent = 'إيقاف التحديث التلقائي';
-      }else{
-        toggleAuto.textContent = 'تشغيل التحديث التلقائي';
-      }
-    }
-
-    // عناصر التحكم
-    refreshBtn.addEventListener('click', ()=>{ updateAll(); });
-    toggleAuto.addEventListener('click', ()=>{
-      const cfg = loadConfig(); cfg.autoUpdate = !cfg.autoUpdate; saveConfig(cfg); startAuto();
+async function fetchFulusLYD() {
+  try {
+    const res = await fetch(FULUS_API_URL, {
+      headers: { Authorization: `Bearer ${FULUS_API_KEY}` }
     });
+    const data = await res.json();
+    return { value: data.data.rate, source: 'Fulus.ly' };
+  } catch (e) {
+    console.error('خطأ Fulus.ly:', e);
+    return { value: '---', source: 'خطأ' };
+  }
+}
 
-    // admin modal
-    openAdmin.addEventListener('click', ()=>{
-      const cfg = loadConfig(); adminNotice.value = cfg.notice; adminLinks.value = JSON.stringify(cfg.links, null, 2); adminModal.classList.add('active');
-    });
-    closeAdmin.addEventListener('click', ()=> adminModal.classList.remove('active'));
-    saveAdmin.addEventListener('click', ()=>{
-      try{
-        const links = JSON.parse(adminLinks.value);
-        const cfg = loadConfig(); cfg.notice = adminNotice.value; cfg.links = links; saveConfig(cfg);
-        adminModal.classList.remove('active'); updateAll();
-        alert('تم الحفظ محلياً');
-      }catch(e){ alert('خطأ في صيغة الروابط. تأكد من JSON صحيح.'); }
-    });
+/* ---------------------------
+   2️⃣ exchangerate.host — صرف عالمي
+   مجاني، لا يحتاج API Key
+---------------------------- */
+const EXCHANGE_HOST_URL = 'https://api.exchangerate.host/latest?base=USD&symbols=LYD';
 
-    // init
-    (function init(){
-      // ضع تهيئة أولية
-      if(!localStorage.getItem('ll_config')) saveConfig(DEFAULT_CONFIG);
-      updateAll();
-      startAuto();
-      // لتجربة تلقائية: حدث كل دقيقة
-    })();
+async function fetchExchangeHost() {
+  try {
+    const res = await fetch(EXCHANGE_HOST_URL);
+    const data = await res.json();
+    return { value: data.rates.LYD.toFixed(3), source: 'exchangerate.host' };
+  } catch (e) {
+    console.error('خطأ exchangerate.host:', e);
+    return { value: '---', source: 'خطأ' };
+  }
+}
 
-    // ملاحظات للمطور: لربط APIs حقيقية استبدل دوال fetch* بـ fetch(URL) وتعامل مع JSON
-  </script>
+/* ---------------------------
+   تحديث القيم في الصفحة
+---------------------------- */
+async function updateAllRates() {
+  document.getElementById('lastUpdate').textContent = 'آخر تحديث: ' + new Date().toLocaleString('ar-EG');
+
+  const fulus = await fetchFulusLYD();
+  document.getElementById('fulusValue').textContent = fulus.value + ' دينار';
+  document.getElementById('fulusSource').textContent = 'المصدر: ' + fulus.source;
+
+  const host = await fetchExchangeHost();
+  document.getElementById('hostValue').textContent = host.value + ' دينار';
+  document.getElementById('hostSource').textContent = 'المصدر: ' + host.source;
+}
+
+/* ---------------------------
+   تحديث تلقائي كل 10 دقائق
+---------------------------- */
+updateAllRates();
+setInterval(updateAllRates, 10 * 60 * 1000);
+
+/* ---------------------------
+   زر التحديث اليدوي
+---------------------------- */
+document.getElementById('refreshBtn').addEventListener('click', updateAllRates);
+</script>
 </body>
 </html>
