@@ -2,76 +2,71 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>منصة أفلييت ذكية</title>
+<title>منصة الخدمات الليبية - نسخة GitHub</title>
 <style>
-body{font-family:Arial;background:#f0f2f5;margin:0;padding:0;}
-.container{max-width:900px;margin:40px auto;background:white;padding:25px;border-radius:15px;text-align:center;box-shadow:0 5px 15px rgba(0,0,0,0.1);}
-#products,#shareTexts{margin-top:20px;text-align:left;}
-.product{border-bottom:1px solid #ddd;padding:12px;margin-bottom:10px;}
-.product a{color:#007bff;text-decoration:none;}
-.product a:hover{text-decoration:underline;}
-.shareText{background:#f7f7f7;padding:10px;margin-bottom:10px;border-radius:5px;}
-input,select,button{padding:8px;margin:5px;border-radius:5px;border:1px solid #ccc;}
-button{background:#28a745;color:white;border:none;cursor:pointer;}
-button:hover{background:#218838;}
+body { font-family: Arial; background:#f2f2f2; padding:20px; }
+.container { max-width:800px; margin:auto; background:white; padding:20px; border-radius:15px; box-shadow:0 0 10px #ccc; }
+.card { padding:15px; background:#fafafa; border:1px solid #ddd; border-radius:10px; margin-top:15px; }
+a.button { display:block; text-align:center; padding:10px; background:#4CAF50; color:white; text-decoration:none; border-radius:10px; margin-top:10px; }
+h2 { text-align:center; }
 </style>
 </head>
 <body>
 <div class="container">
-<h1>منصة أفلييت ذكية</h1>
+<h2>خدمات المدن الليبية</h2>
 
-<h2>فلتر البحث</h2>
-<input type="text" id="search" placeholder="ابحث بالكلمة المفتاحية">
-<button onclick="filterProducts()">تصفية</button>
-
-<h2>المنتجات</h2>
-<div id="products"></div>
-
-<h2>نصوص جاهزة للنشر</h2>
-<div id="shareTexts"></div>
+<!-- مثال للمدن -->
+<div class="card">
+<h3>طرابلس</h3>
+<p>التاجر: مزود خدمة 1</p>
+<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
+<a href="https://wa.me/+218910000001" target="_blank" class="button">تواصل عبر واتساب</a>
 </div>
 
-<script>
-// ======== بيانات المنتجات التجريبية (استبدل بروابطك الحقيقية) ========
-const products = [
-  { name:"لابتوب Amazon 1", price:799, link:"https://amazon.com/product1?tag=YOUR_TAG", platform:"Amazon" },
-  { name:"سماعات Amazon", price:199, link:"https://amazon.com/product2?tag=YOUR_TAG", platform:"Amazon" },
-  { name:"لابتوب AliExpress 1", price:699, link:"https://aliexpress.com/item/1?aff_trk=YOUR_TRACKING", platform:"AliExpress" },
-  { name:"سماعات AliExpress", price:149, link:"https://aliexpress.com/item/2?aff_trk=YOUR_TRACKING", platform:"AliExpress" }
-];
+<div class="card">
+<h3>بنغازي</h3>
+<p>التاجر: مزود خدمة 2</p>
+<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
+<a href="https://wa.me/+218910000002" target="_blank" class="button">تواصل عبر واتساب</a>
+</div>
 
-// ======== عرض المنتجات ========
-function displayProducts(list){
-  const divProducts = document.getElementById('products');
-  const divShare = document.getElementById('shareTexts');
-  divProducts.innerHTML='';
-  divShare.innerHTML='';
-  list.forEach(p=>{
-    const prodDiv=document.createElement('div');
-    prodDiv.className='product';
-    prodDiv.innerHTML=`
-      <h3>${p.name} (${p.platform})</h3>
-      <p>السعر: $${p.price}</p>
-      <a href="${p.link}" target="_blank">شراء الآن</a>
-    `;
-    divProducts.appendChild(prodDiv);
+<div class="card">
+<h3>مصراتة</h3>
+<p>التاجر: مزود خدمة 3</p>
+<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
+<a href="https://wa.me/+218910000003" target="_blank" class="button">تواصل عبر واتساب</a>
+</div>
 
-    const shareDiv=document.createElement('div');
-    shareDiv.className='shareText';
-    shareDiv.innerText=`🚀 اشترِ الآن ${p.name} بسعر $${p.price} عبر هذا الرابط: ${p.link}`;
-    divShare.appendChild(shareDiv);
-  });
-}
+<div class="card">
+<h3>بني وليد</h3>
+<p>التاجر: مزود خدمة 4</p>
+<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
+<a href="https://wa.me/+218910000004" target="_blank" class="button">تواصل عبر واتساب</a>
+</div>
 
-// ======== فلترة المنتجات ========
-function filterProducts(){
-  const keyword=document.getElementById('search').value.toLowerCase();
-  const filtered = products.filter(p => p.name.toLowerCase().includes(keyword));
-  displayProducts(filtered);
-}
+<div class="card">
+<h3>سبها</h3>
+<p>التاجر: مزود خدمة 5</p>
+<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
+<a href="https://wa.me/+218910000005" target="_blank" class="button">تواصل عبر واتساب</a>
+</div>
 
-// ======== عرض جميع المنتجات عند الفتح ========
-displayProducts(products);
-</script>
+<div class="card">
+<h3>الخمس</h3>
+<p>التاجر: مزود خدمة 6</p>
+<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
+<a href="https://wa.me/+218910000006" target="_blank" class="button">تواصل عبر واتساب</a>
+</div>
+
+<!-- أضف باقي المدن بنفس الشكل إذا أحببت -->
+
+<!-- إعلان / رابط ترويجي -->
+<div class="card" style="background:#fffae6; text-align:center;">
+<h3>رابط ترويجي</h3>
+<p>قم بزيارة هذا الموقع واحصل على خصم خاص!</p>
+<a href="https://www.example.com" target="_blank" class="button">اذهب الآن</a>
+</div>
+
+</div>
 </body>
 </html>
