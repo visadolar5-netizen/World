@@ -1,72 +1,365 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>منصة الخدمات الليبية - نسخة GitHub</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>مولّد أفكار عبقري — جاهز لرفع على GitHub</title>
 <style>
-body { font-family: Arial; background:#f2f2f2; padding:20px; }
-.container { max-width:800px; margin:auto; background:white; padding:20px; border-radius:15px; box-shadow:0 0 10px #ccc; }
-.card { padding:15px; background:#fafafa; border:1px solid #ddd; border-radius:10px; margin-top:15px; }
-a.button { display:block; text-align:center; padding:10px; background:#4CAF50; color:white; text-decoration:none; border-radius:10px; margin-top:10px; }
-h2 { text-align:center; }
+  :root{
+    --bg:#0f1724; --card:#0b1220; --accent:#06b6d4; --muted:#94a3b8; --glass: rgba(255,255,255,0.03);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter, "Segoe UI", Tahoma, Arial; background:linear-gradient(180deg,var(--bg),#061019); color:#e6eef6; min-height:100vh; padding:28px;}
+  .wrap{max-width:980px;margin:0 auto;}
+  header{display:flex;gap:16px;align-items:center; margin-bottom:18px;}
+  .logo{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;box-shadow:0 6px 20px rgba(3,7,18,0.6)}
+  h1{margin:0;font-size:20px}
+  p.lead{margin:0;color:var(--muted);font-size:13px}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+  .btn{background:var(--accent);border:none;padding:10px 14px;border-radius:10px;color:#04121a;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(6,182,212,0.12)}
+  .btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+  .card{background:linear-gradient(180deg,var(--card), rgba(8,12,18,0.6)); padding:18px;border-radius:14px;box-shadow:0 8px 30px rgba(2,6,12,0.6); margin-bottom:12px}
+  .row{display:grid;grid-template-columns:1fr 260px;gap:12px}
+  .small{font-size:13px;color:var(--muted)}
+  .idea-title{font-size:18px;margin:0 0 6px}
+  .meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .tag{background:var(--glass);padding:6px 8px;border-radius:8px;font-size:12px;color:var(--muted)}
+  textarea{width:100%;min-height:110px;border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit;resize:vertical}
+  input,select{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .list{max-height:320px;overflow:auto;padding:6px;border-radius:10px}
+  .fav-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);margin-bottom:6px}
+  .muted{color:var(--muted)}
+  footer{margin-top:26px;color:var(--muted);font-size:13px;text-align:center}
+  @media(max-width:880px){ .row{grid-template-columns:1fr} .controls{flex-direction:column} .logo{display:none} }
 </style>
 </head>
 <body>
-<div class="container">
-<h2>خدمات المدن الليبية</h2>
+<div class="wrap">
+  <header>
+    <div class="logo">عبقري</div>
+    <div>
+      <h1>مولّد أفكار مشاريع — جاهز للرفع على GitHub</h1>
+      <p class="lead">أحصل على فكرة مشروع يومية مع اسم، وصف، نموذج ربح، تقنيات وخطوات تنفيذية — كل شيء بلغة عربية مبسطة.</p>
+    </div>
+  </header>
 
-<!-- مثال للمدن -->
-<div class="card">
-<h3>طرابلس</h3>
-<p>التاجر: مزود خدمة 1</p>
-<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
-<a href="https://wa.me/+218910000001" target="_blank" class="button">تواصل عبر واتساب</a>
+  <div class="controls">
+    <button class="btn" id="genBtn">🎯 إخلق فكرة عبقرية الآن</button>
+    <button class="btn secondary" id="dailyBtn">🔁 فكرة اليوم</button>
+    <select id="difficulty">
+      <option value="easy">سريع التنفيذ (منخفض)</option>
+      <option value="medium" selected>متوازن</option>
+      <option value="hard">متقدم (فريد)</option>
+    </select>
+    <input id="seedInput" placeholder="اختياري: كلمة مفتاحية لتوليد أسماء (مثال: ليبيا)" />
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn secondary" id="saveFav">⭐ حفظ للمفضلات</button>
+      <button class="btn" id="downloadJson">⤓ تحميل JSON</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div>
+      <div class="card">
+        <div id="ideaArea">
+          <h2 class="idea-title" id="ideaTitle">اضغط "إخلق فكرة عبقرية الآن" للحصول على اقتراح</h2>
+          <div class="small muted" id="ideaMeta">—</div>
+          <div class="meta" style="margin-top:12px">
+            <div class="tag" id="bizModel">نموذج ربح: —</div>
+            <div class="tag" id="techStack">تقنيات: —</div>
+            <div class="tag" id="estimate">مدة تقريبية: —</div>
+          </div>
+
+          <h3 style="margin-top:14px">الوصف</h3>
+          <textarea id="ideaDesc" readonly>—</textarea>
+
+          <h3 style="margin-top:12px">خطوات أولية مقترحة</h3>
+          <ol id="stepsList" style="padding-left:18px"></ol>
+
+          <div style="margin-top:12px" class="actions">
+            <button class="btn" id="copyBtn">نسخ الفكرة</button>
+            <button class="btn secondary" id="editBtn">✍️ عدّل النص</button>
+            <button class="btn secondary" id="shareBtn">مشاركة (موبايل)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card small">
+        <strong>نصيحة نشر GitHub:</strong>
+        <div style="margin-top:8px">
+          1) احفظ هذا الملف باسم <code>index.html</code>.<br>
+          2) ارفع للمستودع على GitHub، ثم فعل GitHub Pages من Settings → Pages → اختر branch main و/أو root.<br>
+          3) الرابط سيصبح: <span class="muted">https://USERNAME.github.io/REPO/</span>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="card">
+        <h3>المفضلات</h3>
+        <div class="list" id="favList">
+          <div class="muted">لا توجد مفضلات بعد</div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="btn secondary" id="clearFavs">مسح المفضلات</button>
+          <button class="btn" id="exportFavs">تصدير المفضلات</button>
+        </div>
+      </div>
+
+      <div class="card small" style="margin-top:12px">
+        <strong>خيارات توليد</strong>
+        <p class="small muted">التوليد يعتمد على نماذج قوالب داخلية ويمكنك وضع كلمة مفتاحية لتوجيه الفكرة.</p>
+      </div>
+    </aside>
+  </div>
+
+  <footer>صُمّم لك بسرعة — انسخ الملف وارفعة على GitHub. إذا تبي أعدّل على شكل المشروع أو أحط لك نسخة بلغة إنجليزية أو أضف باك-إند، قلّي توا.</footer>
 </div>
 
-<div class="card">
-<h3>بنغازي</h3>
-<p>التاجر: مزود خدمة 2</p>
-<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
-<a href="https://wa.me/+218910000002" target="_blank" class="button">تواصل عبر واتساب</a>
-</div>
+<script>
+/* ===== مولّد الأفكار — كل شيء يعمل محلياً بدون خادم =====
+   الاستخدام: انسخ هذا الملف كـ index.html وارفعة.
+*/
 
-<div class="card">
-<h3>مصراتة</h3>
-<p>التاجر: مزود خدمة 3</p>
-<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
-<a href="https://wa.me/+218910000003" target="_blank" class="button">تواصل عبر واتساب</a>
-</div>
+const templates = [
+  {
+    type: "منصة خدمات محلية",
+    names: ["خدمة الآن", "سوق الحومة", "توصيل بلدي"],
+    models: ["اشتراك + نسبة من المعاملة", "دفع لكل طلب", "إعلانات وباقة مميزة"],
+    tech: ["React / Vue", "Firebase أو Supabase", "PWA للهواتف"],
+    steps: [
+      "تصميم صفحة تسجيل وخدمات بسيطة",
+      "نشر عروض أولية على فيسبوك/تلغرام",
+      "تجربة خدمة مع 10 عملاء وتحسين",
+      "إطلاق باقة اشتراك ومراقبة بيانات الاستخدام"
+    ]
+  },
+  {
+    type: "أداة إنتاج محتوى تلقائية",
+    names: ["كاتب ذكي", "مُنتج المحتوى السريع"],
+    models: ["اشتراك شهري", "بيع قوالب ومقدمات"],
+    tech: ["Node.js + OpenAI API (اختياري)", "Next.js", "Storage للوسائط"],
+    steps: [
+      "صنع مولّد مقالات/فيديو بسيط",
+      "إضافة قوالب جاهزة للنيشات الشائعة",
+      "اختبار مادي مع 50 مقالًا وإظهار النتائج",
+      "تحسين UI ودفع نمو العضويات"
+    ]
+  },
+  {
+    type: "أداة إدارة محاسبة بسيطة للمحلات",
+    names: ["دفتر إلكتروني", "محاسب الحانوت"],
+    models: ["اشتراك شهري أو ترخيص سنوي"],
+    tech: ["Electron أو PWA", "LocalStorage + Export CSV"],
+    steps: [
+      "بناء شاشة الفواتير وإضافة منتج",
+      "دعم طباعة الفاتورة وتصدير CSV",
+      "تجربة مع 5 محلات محلية",
+      "إضافة تقارير شهرية وتذكير بالذمم"
+    ]
+  },
+  {
+    type: "خدمة بيانات محلية (أسعار، وقود، سيولة)",
+    names: ["خريطة السيولة", "سعرك الآن"],
+    models: ["إعلانات + اشتراك للمحافظات"],
+    tech: ["Scraping خفيف أو مدخل يدوي", "Map API بسيطة"],
+    steps: [
+      "تجميع بيانات أولية عن الأسعار والمحطات",
+      "عرضها على خريطة تفاعلية",
+      "تفعيل تقارير أسبوعية عبر البريد",
+      "فتح لوحة للمستخدمين لإضافة تقارير"
+    ]
+  }
+];
 
-<div class="card">
-<h3>بني وليد</h3>
-<p>التاجر: مزود خدمة 4</p>
-<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
-<a href="https://wa.me/+218910000004" target="_blank" class="button">تواصل عبر واتساب</a>
-</div>
+// توليد رقم صحيح من نص (hash بسيط)
+function hashString(s){
+  let h=2166136261;
+  for(let i=0;i<s.length;i++){
+    h ^= s.charCodeAt(i);
+    h += (h<<1)+(h<<4)+(h<<7)+(h<<8)+(h<<24);
+  }
+  return Math.abs(h);
+}
 
-<div class="card">
-<h3>سبها</h3>
-<p>التاجر: مزود خدمة 5</p>
-<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
-<a href="https://wa.me/+218910000005" target="_blank" class="button">تواصل عبر واتساب</a>
-</div>
+// توليد فكرة عشوائية مع seed
+function generate({seed='', difficulty='medium', daily=false}={}){
+  const dateSeed = daily ? (new Date()).toISOString().slice(0,10) : '';
+  const finalSeed = (seed + '|' + difficulty + '|' + dateSeed).trim();
+  const h = hashString(finalSeed || Math.random().toString());
+  const t = templates[h % templates.length];
+  const name = t.names[h % t.names.length] + (seed?(' — '+seed):'');
+  const biz = t.models[h % t.models.length];
+  const tech = t.tech.slice(0, Math.min(3, 1 + (h%3)));
+  const est = difficulty==='easy'? '2-6 أسابيع' : difficulty==='medium'? '1-3 أشهر' : '3-9 أشهر (نموذج متقدّم)';
+  // خطوات مخصّصة
+  const steps = [...t.steps];
+  if(difficulty==='easy') steps.unshift("إطلاق MVP بسيط وقياس الطلب خلال أسبوعين");
+  if(difficulty==='hard') steps.push("بناء فريق وتقارير أداء شهرية");
 
-<div class="card">
-<h3>الخمس</h3>
-<p>التاجر: مزود خدمة 6</p>
-<p>الخدمات: توصيل، صيانة، تنظيف، استشارات</p>
-<a href="https://wa.me/+218910000006" target="_blank" class="button">تواصل عبر واتساب</a>
-</div>
+  const desc = `فكرة: ${t.type}. هذا مشروع يهدف إلى ${t.type==='أداة إنتاج محتوى تلقائية' ? 'تسهيل إنتاج المحتوى بنقرة واحدة' :
+    t.type==='منصة خدمات محلية' ? 'ربط مقدمي الخدمات مع المستهلكين المحليين بسرعة' :
+    t.type==='أداة إدارة محاسبة بسيطة للمحلات' ? 'تبسيط إدارة المبيعات والمحاسبة للمحلات الصغيرة' :
+    'تقديم بيانات محلية مفيدة للمواطنين' }.`
 
-<!-- أضف باقي المدن بنفس الشكل إذا أحببت -->
+  return {
+    id: 'idea_' + h,
+    title: name,
+    type: t.type,
+    bizModel: biz,
+    techStack: tech.join(' • '),
+    estimate: est,
+    description: desc,
+    steps
+  };
+}
 
-<!-- إعلان / رابط ترويجي -->
-<div class="card" style="background:#fffae6; text-align:center;">
-<h3>رابط ترويجي</h3>
-<p>قم بزيارة هذا الموقع واحصل على خصم خاص!</p>
-<a href="https://www.example.com" target="_blank" class="button">اذهب الآن</a>
-</div>
+// DOM
+const genBtn = document.getElementById('genBtn');
+const dailyBtn = document.getElementById('dailyBtn');
+const ideaTitle = document.getElementById('ideaTitle');
+const ideaMeta = document.getElementById('ideaMeta');
+const ideaDesc = document.getElementById('ideaDesc');
+const stepsList = document.getElementById('stepsList');
+const bizModel = document.getElementById('bizModel');
+const techStack = document.getElementById('techStack');
+const estimate = document.getElementById('estimate');
+const difficulty = document.getElementById('difficulty');
+const seedInput = document.getElementById('seedInput');
+const copyBtn = document.getElementById('copyBtn');
+const saveFav = document.getElementById('saveFav');
+const favList = document.getElementById('favList');
+const clearFavs = document.getElementById('clearFavs');
+const exportFavs = document.getElementById('exportFavs');
+const downloadJson = document.getElementById('downloadJson');
+const dailyBtnEl = document.getElementById('dailyBtn');
 
-</div>
+let currentIdea = null;
+
+// localStorage helpers
+function loadFavs(){ try{return JSON.parse(localStorage.getItem('gen_favs')||'[]')}catch(e){return []}}
+function saveFavsToStorage(a){ localStorage.setItem('gen_favs', JSON.stringify(a)) }
+function renderFavs(){
+  const arr = loadFavs();
+  favList.innerHTML = '';
+  if(!arr.length){ favList.innerHTML = '<div class="muted">لا توجد مفضلات بعد</div>'; return; }
+  arr.slice().reverse().forEach(item=>{
+    const div = document.createElement('div'); div.className='fav-item';
+    const left = document.createElement('div'); left.innerHTML = `<strong>${item.title}</strong><div class="small muted">${item.type} • ${item.bizModel}</div>`;
+    const right = document.createElement('div');
+    const open = document.createElement('button'); open.className='btn secondary'; open.textContent='افتح'; open.onclick=()=>showIdea(item);
+    const del = document.createElement('button'); del.className='btn'; del.style.padding='6px 8px'; del.textContent='حذف'; del.onclick=()=>{ removeFav(item.id); };
+    right.appendChild(open); right.appendChild(del);
+    div.appendChild(left); div.appendChild(right);
+    favList.appendChild(div);
+  });
+}
+function addFav(it){
+  const arr = loadFavs();
+  if(arr.find(x=>x.id===it.id)) return alert('الفكرة موجودة بالمفضلات بالفعل');
+  arr.push(it); saveFavsToStorage(arr); renderFavs(); alert('حُفظت الفكرة بالمفضلات');
+}
+function removeFav(id){
+  let arr = loadFavs(); arr = arr.filter(x=>x.id!==id); saveFavsToStorage(arr); renderFavs();
+}
+function clearAllFavs(){ if(confirm('مسح جميع المفضلات؟')){ saveFavsToStorage([]); renderFavs(); } }
+
+// show idea to UI
+function showIdea(it){
+  currentIdea = it;
+  ideaTitle.textContent = it.title;
+  ideaMeta.textContent = `${it.type} • مُعرّف: ${it.id}`;
+  ideaDesc.value = it.description;
+  bizModel.textContent = 'نموذج ربح: ' + it.bizModel;
+  techStack.textContent = 'تقنيات: ' + it.techStack;
+  estimate.textContent = 'المدة: ' + it.estimate;
+  stepsList.innerHTML = '';
+  it.steps.forEach(s=>{
+    const li = document.createElement('li'); li.textContent = s; stepsList.appendChild(li);
+  });
+}
+
+// event handlers
+genBtn.onclick = ()=> {
+  const it = generate({seed: seedInput.value.trim(), difficulty: difficulty.value, daily:false});
+  showIdea(it);
+};
+dailyBtn.onclick = ()=> {
+  const it = generate({seed: seedInput.value.trim(), difficulty: difficulty.value, daily:true});
+  showIdea(it);
+  // إيماءة للمستخدم أنه اقتراح اليوم
+  dailyBtnEl.textContent = '🔁 فكرة اليوم (' + new Date().toLocaleDateString() + ')';
+}
+
+copyBtn.onclick = async ()=>{
+  if(!currentIdea) return alert('لا توجد فكرة لنسخها');
+  const text = `${currentIdea.title}\n\n${currentIdea.description}\n\nنموذج الربح: ${currentIdea.bizModel}\nتقنيات: ${currentIdea.techStack}\nمدة: ${currentIdea.estimate}\n\nخطوات:\n- ${currentIdea.steps.join('\n- ')}`;
+  try{
+    await navigator.clipboard.writeText(text);
+    alert('تم نسخ الفكرة للحافظة!');
+  }catch(e){
+    prompt('انسخ النص يدوياً:', text);
+  }
+};
+
+saveFav.onclick = ()=>{
+  if(!currentIdea) return alert('لا توجد فكرة للحفظ');
+  addFav(currentIdea);
+};
+
+clearFavs.onclick = clearAllFavs;
+
+exportFavs.onclick = ()=>{
+  const arr = loadFavs();
+  if(!arr.length) return alert('لا توجد مفضلات للتصدير');
+  const blob = new Blob([JSON.stringify(arr, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'favs.json'; a.click(); URL.revokeObjectURL(url);
+};
+
+downloadJson.onclick = ()=>{
+  if(!currentIdea) return alert('لا توجد فكرة للتنزيل');
+  const blob = new Blob([JSON.stringify(currentIdea, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = (currentIdea.title.replace(/\s+/g,'_')||'idea') + '.json'; a.click(); URL.revokeObjectURL(url);
+};
+
+// share (mobile)
+document.getElementById('shareBtn').onclick = async ()=>{
+  if(!currentIdea) return alert('لا توجد فكرة للمشاركة');
+  const text = `${currentIdea.title}\n\n${currentIdea.description}\n\nخطوات:\n- ${currentIdea.steps.join('\n- ')}`;
+  if(navigator.share){
+    try{ await navigator.share({title: currentIdea.title, text}); }
+    catch(e){ alert('فشل المشاركة: '+e.message) }
+  } else {
+    alert('المشاركة غير مدعومة في هذا المتصفح. سيُنسخ النص للحافظة.');
+    try{ await navigator.clipboard.writeText(text); alert('تم النسخ!'); }catch(e){ prompt('انسخ النص:', text); }
+  }
+};
+
+// تحكّم تحرير الوصف (مؤقت)
+document.getElementById('editBtn').onclick = ()=>{
+  if(!currentIdea) return alert('لا توجد فكرة للتعديل');
+  ideaDesc.readOnly = !ideaDesc.readOnly;
+  if(ideaDesc.readOnly) { alert('تم قفل التعديل'); }
+  else { alert('يمكنك الآن تعديل الوصف — اضغط مرّة أخرى لقفله وحفظ التغييرات محلياً'); }
+  // تحديث الوصف في الفكرة عند القفل
+  if(ideaDesc.readOnly && currentIdea){
+    currentIdea.description = ideaDesc.value;
+  }
+};
+
+// load initial
+renderFavs();
+
+// auto-generate daily idea on load
+(function(){
+  const it = generate({seed:'', difficulty: difficulty.value, daily:true});
+  showIdea(it);
+  dailyBtnEl.textContent = '🔁 فكرة اليوم (' + new Date().toLocaleDateString() + ')';
+})();
+
+</script>
 </body>
 </html>
